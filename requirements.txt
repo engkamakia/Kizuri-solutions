@@ -1,5 +1,5 @@
 asgiref==3.7.2
-#backports.zoneinfo==0.2.1
+backports.zoneinfo==0.2.1
 beautifulsoup4==4.12.2
 bootstrap4==0.1.0
 certifi==2023.11.17
@@ -15,9 +15,8 @@ gunicorn==23.0.0
 idna==3.6
 packaging==24.1
 pillow==10.4.0
-psycopg==3.1.18
-psycopg-binary==3.1.18
 psycopg2==2.9.9
+psycopg2-binary==2.9.9
 pycparser==2.21
 python-decouple==3.8
 python-dotenv==1.0.0
@@ -27,3 +26,4 @@ soupsieve==2.5
 sqlparse==0.4.4
 typing-extensions==4.8.0
 urllib3==2.1.0
+whitenoise==6.7.0
