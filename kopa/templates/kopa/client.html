@@ -1,0 +1,545 @@
+{% extends 'kopa/layout.html' %} {% load static %} {% block content %}
+
+<main>
+  <!-- Hero Start-->
+  <!-- ... -->
+  <style>
+    /* Custom CSS for form fields */
+    .form-row .form-group.col-md-12 select {
+      width: 100%;
+    }
+
+    /* Ensuring all conditional fields are hidden by default */
+    .conditional-section {
+      display: none;
+    }
+  </style>
+
+  <!-- Apply Area Start -->
+  <div class="hero-area2 slider-height2 hero-overly2 d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center pt-50">
+            <h2>Client Commitment Form</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="apply-area pt-150 pb-150">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="apply-wrapper">
+            <!-- Form -->
+            <form method="post" action="{% url 'client' %}" class="needs-validation" novalidate>
+              {% csrf_token %}
+
+              
+
+              
+
+              <!-- Progress bar -->
+              <div class="progressbar">
+                <div class="progress" id="progress"></div>
+
+                <div
+                  class="progress-step progress-step-active"
+                  data-title="Client info"
+                ></div>
+                <div class="progress-step" data-title="Family info"></div>
+                <div class="progress-step" data-title="Residence info"></div>
+                <div class="progress-step" data-title="Collateral info"></div>
+              </div>
+
+              <!-- Steps -->
+              <div class="form-step form-step-active">
+                <h5 class="text-center"><b>CLIENT INFO<b></h5>
+                <!--<div class="input-group">
+                  <label for="Fullname">Full name</label>
+                  <input type="text" name="Fullname" id="Fullname" />
+                </div>-->
+                <div class="input-group">
+                  <label for="Nickname">Nick name</label>
+                  <input type="text" name="Nickname" id="Nickname" />
+                </div>
+                <!--<div class="input-group">
+                  <label for="NationalId">ID number</label>
+                  <input
+                    type="number"
+                    name="NationalId"
+                    NationalId="NationalId"
+                  />
+                </div>-->
+                <div class="input-group">
+                  <label for="phone1">Phone 1</label>
+                  <input type="text" name="phone1" id="phone1" />
+                </div>
+                <div class="input-group">
+                  <label for="phone2">Phone 2 <i>(optional)</i></label>
+                  <input type="text" name="phone2" id="phone2" />
+                </div>
+                <!--<div class="input-group">
+                  <label for="email">Email</label>
+                  <input type="text" name="email" id="email" />
+                </div>-->
+
+                <div class="">
+                  <label for="employment-status"
+                    >Employment Status:
+                    <i>(Kindly select from button below)</i></label
+                  >
+                  <select
+                    id="employment-status"
+                    name="employment-status"
+                    onchange="showFields()"
+                  >
+                    <option value="">Select...</option>
+                    <option value="employed">Employed</option>
+                    <option value="unemployed">Unemployed</option>
+                    <option value="self-employed">Self-employed</option>
+                  </select>
+
+                  <div id="employed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="employer-name">Employers Name:</label>
+                    <input
+                      type="text"
+                      id="employer-name"
+                      name="employer-name"
+                    />
+
+                    <label for="job-title">Job Title:</label>
+                    <input type="text" id="job-title" name="job-title" />
+                    <label for="location_of_work">Location of work:</label>
+                    <input
+                      type="text"
+                      id="location_of_work"
+                      name="location_of_work"
+                    />
+                    <label for="supervisors_name">Supervisors name:</label>
+                    <input
+                      type="text"
+                      id="supervisors_name"
+                      name="supervisors_name"
+                    />
+                    <label for="supervisors_contact"
+                      >Supervisors contact:</label
+                    >
+                    <input
+                      type="text"
+                      id="supervisors_contact"
+                      name="supervisors_contact"
+                    />
+                    <label for="monthly_income">Net monthly income:</label>
+                    <input
+                      type="text"
+                      id="monthly_income"
+                      name="monthly_income"
+                    />
+                    <label for="monthly_expense">Monthly expense:</label>
+                    <input
+                      type="text"
+                      id="monthly_expense"
+                      name="monthly_expense"
+                    />
+                  </div>
+
+                  <div id="unemployed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="unemployment-reason"
+                      >Reason for Unemployment:</label
+                    >
+                    <input
+                      type="text"
+                      id="unemployment-reason"
+                      name="unemployment-reason"
+                    />
+                  </div>
+
+                  <div id="self-employed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="business-name">Business Name:</label>
+                    <input
+                      type="text"
+                      id="business-name"
+                      name="business-name"
+                    />
+
+                    <label for="industry-type">Industry Type:</label>
+                    <input
+                      type="text"
+                      id="industry-type"
+                      name="industry-type"
+                    />
+                    <label for="business_location">Business location:</label>
+                    <input
+                      type="text"
+                      id="business_location"
+                      name="business_location"
+                    />
+                    <label for="daily_income">Daily income:</label>
+                    <input type="text" id="daily_income" name="daily_income" />
+                    <label for="daily_expense">Daily expense:</label>
+                    <input
+                      type="text"
+                      id="daily_expense"
+                      name="daily_expense"
+                    />
+                    <label for="net_income">Net income:</label>
+                    <input type="text" id="net_income" name="net_income" />
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label for="loan_amount">Loan amount</label>
+                  <input type="text" name="loan_amount" id="loan_amount" />
+                </div>
+                <div class="input-group">
+                  <label for="amount_in_words">Loan amount in words</label>
+                  <input
+                    type="text"
+                    name="amount_in_words"
+                    id="amount_in_words"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="date_of_loan">Date loan taken</label>
+                  <input type="date" name="date_of_loan" id="date_of_loan" />
+                </div>
+                <div class="input-group">
+                  <label for="repay_principal">Repay principal</label>
+                  <input
+                    type="text"
+                    name="repay_principal"
+                    id="repay_principal"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="interest">Interest</label>
+                  <input type="text" name="interest" id="interest" />
+                </div>
+                <div class="input-group">
+                  <label for="total">Total</label>
+                  <input type="text" name="total" id="total" />
+                </div>
+                <div class="input-group">
+                  <label for="repay_date">Repay on or before</label>
+                  <input type="date" name="repay_date" id="repay_date" />
+                </div>
+
+                <br /><br /><br />
+                <div class="">
+                  <a href="#" class="btn btn-next width-50 ml-auto">Next</a>
+                </div>
+              </div>
+              <div class="form-step">
+                <h5 class="text-center"><b>FAMILY INFORMATION<b></h5>
+                <div class="">
+                  <label for="marital-status"
+                    >Marital Status:
+                    <i>(Kindly select from button below)</i></label
+                  >
+                  <select
+                    id="marital-status"
+                    name="marital-status"
+                    onchange="showMaritalFields()"
+                  >
+                    <option value="">Select...</option>
+                    <option value="married">Married</option>
+                    <option value="single">Single</option>
+                  </select>
+
+                  <div id="married-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="spouse-name">Spouse's Name:</label>
+                    <input type="text" id="spouse-name" name="spouse-name" />
+
+                    <label for="work_place">Work place:</label>
+                    <input type="text" id="work_place" name="work_place" />
+                    <label for="position">Position:</label>
+                    <input type="text" id="position" name="position" />
+                    <label for="contact">Contact:</label>
+                    <input type="text" id="contact" name="contact" />
+                    <label for="no_of_dependants">Number of dependants:</label>
+                    <input
+                      type="text"
+                      id="no_of_dependants"
+                      name="no_of_dependants"
+                    />
+                  </div>
+
+                  <div id="single-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="no_of_dependants">Number of dependants:</label>
+                    <input
+                      type="text"
+                      id="no_of_dependants"
+                      name="no_of_dependants"
+                    />
+                  </div>
+                  <br><br>
+
+                  
+  <div class="">
+    <label for="parent-type">Parent Type: 
+      <i>(Kindly select from the options below)</i>
+    </label>
+    <select id="parent-type" name="parent-type" onchange="showParentFields()">
+      <option value="">Select...</option>
+      <option value="father">Father Details</option>
+      <option value="mother">Mother Details</option>
+    </select>
+
+    <div id="father-fields" class="conditional-section" style="display:none;">
+      <br /><br />
+      <label for="father-full-name">Father's Full Name:</label>
+      <input type="text" id="father-full-name" name="father-full-name" />
+      
+      <label for="father-contact">Father's Contact:</label>
+      <input type="text" id="father-contact" name="father-contact" />
+    </div>
+
+    <div id="mother-fields" class="conditional-section" style="display:none;">
+      <br /><br />
+      <label for="mother-full-name">Mother's Full Name:</label>
+      <input type="text" id="mother-full-name" name="mother-full-name" />
+      
+      <label for="mother-contact">Mother's Contact:</label>
+      <input type="text" id="mother-contact" name="mother-contact" />
+    </div>
+  </div>
+
+  <div class="input-group">
+                  <label for="nextofkin">Next of Kin</label>
+                  <input type="text" name="nextofkin" id="nextofkin" />
+                </div>
+
+                </div>
+                
+                <br /><br /><br />
+                <div>
+                  <div class="btns-group">
+                    <a href="#" class="btn btn-prev">Previous</a>
+                    <a href="#" class="btn btn-next">Next</a>
+                  </div>
+                </div>
+              </div>
+              <div class="form-step">
+                <h5 class="text-center"><b>RESIDENCE INFORMATION<b></h5>
+                <div class="input-group">
+                  <label for="permanent_residence"
+                    >Applicants permanent residence:</label
+                  >
+                  <input
+                    type="text"
+                    id="permanent_residence"
+                    name="permanent_residence"
+                    placeholder="eg. Ngoingwa, Thika"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="temporary_residence"
+                    >Applicants temporary residence:<i>(if any)</i></label
+                  >
+                  <input
+                    type="text"
+                    id="temporary_residence"
+                    name="temporary_residence"
+                    placeholder="eg. Ngoingwa, Thika"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="rural_residence"
+                    >Applicants rural residence:<i>(if any)</i></label
+                  >
+                  <input
+                    type="text"
+                    id="rural_residence"
+                    name="rural_residence"
+                    placeholder="eg. Ngoingwa, Thika"
+                  />
+                </div>
+
+                <div class="btns-group">
+                  <a href="#" class="btn btn-prev">Previous</a>
+                  <a href="#" class="btn btn-next">Next</a>
+                </div>
+              </div>
+              <div class="form-step">
+
+                <h5 class="text-center"><b>Collateral Information<b></h5>
+              <input type="hidden" id="item_count" name="item_count" value="0">
+    <div id="collateral-items"></div>
+    <p>you can add upto three collateral items</p>
+    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
+    
+
+    <br><br><br><br>
+                
+                <!--<h5 class="text-center"><b>CRB INFORMATION<b></h5>-->
+                <p>
+                  I <b>{{request.user.first_name}}</b> of ID number <b>{{request.user.id_number}} </b> Authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.
+                  
+                </p>
+
+                 <div class="input-group">
+        <label for="agree_to_terms">
+            <input type="checkbox" id="agree_to_terms" name="agree_to_terms" required>
+            I agree to the Terms and Conditions
+        </label>
+    </div>
+               
+                <div class="btns-group">
+                  <a href="#" class="btn btn-prev">Previous</a>
+                  <br /><br />
+                  
+    
+                  <input type="submit" value="Submit" class="btn" />
+                </div>
+              </div>
+
+              {% csrf_token %}
+            </form>
+
+            <script>
+              function showFields() {
+                const status =
+                  document.getElementById("employment-status").value;
+
+                // Hide all sections first
+                document.getElementById("employed-fields").style.display =
+                  "none";
+                document.getElementById("unemployed-fields").style.display =
+                  "none";
+                document.getElementById("self-employed-fields").style.display =
+                  "none";
+
+                // Show the relevant section based on selection
+                if (status === "employed") {
+                  document.getElementById("employed-fields").style.display =
+                    "block";
+                } else if (status === "unemployed") {
+                  document.getElementById("unemployed-fields").style.display =
+                    "block";
+                } else if (status === "self-employed") {
+                  document.getElementById(
+                    "self-employed-fields"
+                  ).style.display = "block";
+                }
+              }
+
+              function showMaritalFields() {
+                const status = document.getElementById("marital-status").value;
+
+                // Hide all marital-related sections
+                document.getElementById("married-fields").style.display =
+                  "none";
+                document.getElementById("single-fields").style.display = "none";
+
+                // Show the relevant section based on marital status
+                if (status === "married") {
+                  document.getElementById("married-fields").style.display =
+                    "block";
+                } else if (status === "single") {
+                  document.getElementById("single-fields").style.display =
+                    "block";
+                }
+              }
+            </script>
+
+            <script>
+              const prevBtns = document.querySelectorAll(".btn-prev");
+              const nextBtns = document.querySelectorAll(".btn-next");
+              const progress = document.getElementById("progress");
+              const formSteps = document.querySelectorAll(".form-step");
+              const progressSteps = document.querySelectorAll(".progress-step");
+
+              let formStepsNum = 0;
+
+              nextBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                  formStepsNum++;
+                  updateFormSteps();
+                  updateProgressbar();
+                });
+              });
+
+              prevBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                  formStepsNum--;
+                  updateFormSteps();
+                  updateProgressbar();
+                });
+              });
+
+              function updateFormSteps() {
+                formSteps.forEach((formStep) => {
+                  formStep.classList.contains("form-step-active") &&
+                    formStep.classList.remove("form-step-active");
+                });
+
+                formSteps[formStepsNum].classList.add("form-step-active");
+              }
+
+              function updateProgressbar() {
+                progressSteps.forEach((progressStep, idx) => {
+                  if (idx < formStepsNum + 1) {
+                    progressStep.classList.add("progress-step-active");
+                  } else {
+                    progressStep.classList.remove("progress-step-active");
+                  }
+                });
+
+                const progressActive = document.querySelectorAll(
+                  ".progress-step-active"
+                );
+
+                progress.style.width =
+                  ((progressActive.length - 1) / (progressSteps.length - 1)) *
+                    100 +
+                  "%";
+              }
+
+
+              function showParentFields() {
+  var parentType = document.getElementById("parent-type").value;
+  document.getElementById("father-fields").style.display = parentType === "father" ? "block" : "none";
+  document.getElementById("mother-fields").style.display = parentType === "mother" ? "block" : "none";
+}
+            </script>
+            <script>
+  let itemCount = 0;
+
+  function addCollateralItem() {
+    if (itemCount < 3) {
+      itemCount++;
+      document.getElementById('item_count').value = itemCount; // Update item count
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'collateral-item';
+      itemDiv.innerHTML = `
+        <h3>Item ${itemCount}</h3>
+        <label for="item-name-${itemCount}">Name of Item:</label>
+        <input type="text" id="item-name-${itemCount}" name="item-name-${itemCount}" required><br><br>
+        <label for="item-description-${itemCount}">Short Description:</label>
+        <textarea id="item-description-${itemCount}" name="item-description-${itemCount}" rows="3" style="resize: vertical; width: 100%;" required></textarea><br><br>
+        <label>Photos of Item:</label><br>
+        <input type="file" name="item-photo-${itemCount}-1" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-2" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-3" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-4" accept="image/*" required><br><br>
+      `;
+      document.getElementById('collateral-items').appendChild(itemDiv);
+    } else {
+      alert('You can only add up to 3 collateral items.');
+    }
+  }
+</script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock%}

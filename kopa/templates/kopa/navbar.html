@@ -1,0 +1,89 @@
+{% load static %}
+
+<header>
+  <!-- Header Start -->
+  <div class="header-area header-transparent">
+    <div class="main-header header-sticky">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <!-- Logo -->
+          <div class="col-xl-2 col-lg-2 col-md-1">
+            <div class="logo">
+              <a href="{% url 'home' %}"
+                ><img src="{% static 'assets/img/logo/logo8.png'%}" alt=""
+              /></a>
+            </div>
+          </div>
+          <div class="col-xl-10 col-lg-10 col-md-10">
+            <div
+              class="menu-main d-flex align-items-center justify-content-end"
+            >
+              <!-- Main-menu -->
+              <div class="main-menu f-right d-none d-lg-block">
+                <nav>
+                  <ul id="navigation">
+                    <li class="active">
+                      <a href="{% url 'home' %}"
+                        ><i class="fa fa-home" aria-hidden="true"></i> Home</a
+                      >
+                    </li>
+                    <li>
+                      <a href="{% url 'client' %}"
+                        ><i class="fa fa-file" aria-hidden="true"></i>
+                        Documents</a
+                      >
+                    </li>
+
+                    <!-- <li><a href="{% url 'guarantor' %}"><i class="fa fa-database" aria-hidden="true"></i> Apply</a></li>-->
+                     {% if request.user.is_staff %}    
+                    <li>
+                      <a href="{% url 'dashboard' %}"
+                        ><i class="fa fa-table" aria-hidden="true"></i>
+                        Dashboard</a
+                      >
+                    </li>
+                    {% endif %}
+                             
+
+                    <li>
+                      <a href="{% url 'contact' %}"
+                        ><i class="fa fa-address-book" aria-hidden="true"></i>
+                        Contact Us</a
+                      >
+                    </li>
+                    {% if not request.user.is_authenticated %}
+                    <li>
+                      <a href="{% url 'login' %}"
+                        ><i class="fas fa-sign-in-alt"></i> Login</a
+                      >
+                    </li>
+                    {% else %}
+                    <li>
+                      <a href="{% url 'logout' %}"
+                        ><i class="fas fa-sign-out-alt"></i> Logout</a
+                      >
+                    </li>
+
+                    <span class="hello-msg"
+                      >Hello {{request.user.first_name}}
+                    </span>
+                    {% endif %}
+                    
+                  </ul>
+                </nav>
+              </div>
+              <!--<div class="header-right-btn f-right d-none d-lg-block">
+                <a class="btn header-btn" a href="{%url 'logout' %}">Logout</a>
+              </div>-->
+            </div>
+          </div>
+          <!-- Mobile Menu -->
+          <div class="col-12">
+            <div class="mobile_menu d-block d-lg-none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header End -->
+</header>

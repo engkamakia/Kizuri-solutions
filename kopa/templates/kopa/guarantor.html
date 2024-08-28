@@ -1,0 +1,130 @@
+{% extends 'kopa/layout.html' %}
+{% load static %}
+{% block content %}
+
+<main>
+  <style>
+    .conditional-section {
+      display: none;
+    }
+
+     .collateral-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+  </style>
+
+  <!-- Apply Area Start -->
+  <div class="hero-area2 slider-height2 hero-overly2 d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center pt-50">
+            <h2>Guarantor Details</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apply-area pt-150 pb-150">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="apply-wrapper">
+            <form method="post" action="{% url 'guarantor' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
+              {% csrf_token %}
+
+              <h1 class="text-center">GUARANTOR INFO</h1>
+              <div class="input-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" name="full_name" id="full_name" required />
+              </div>
+              <div class="input-group">
+                <label for="nick_name">Nick Name</label>
+                <input type="text" name="nick_name" id="nick_name" required />
+              </div>
+              <div class="input-group">
+                <label for="id_number">ID Number</label>
+                <input type="number" name="id_number" id="id_number" required />
+              </div>
+              <div class="input-group">
+                <label for="phone1">Phone 1</label>
+                <input type="text" name="phone1" id="phone1" required />
+              </div>
+              <div class="input-group">
+                <label for="phone2">Phone 2 (optional)</label>
+                <input type="text" name="phone2" id="phone2" />
+              </div>
+              <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required />
+              </div>
+              <div class="input-group">
+                <label for="guarantee_name">Wish to Guarantee (Full Name)</label>
+                <input type="text" name="guarantee_name" id="guarantee_name" required />
+              </div>
+              <div class="input-group">
+                <label for="loan_amount">Loan Amount</label>
+                <input type="number" name="loan_amount" id="loan_amount" required />
+              </div>
+              <div class="input-group">
+                <label for="loan_amount_words">Loan Amount in Words</label>
+                <input type="text" name="loan_amount_words" id="loan_amount_words" required />
+              </div>
+              <div class="input-group">
+  <label for="guarantee_date">Date You Guarantee / {{ shift.start_date|date:'l' }}</label>
+  <input type="date" name="guarantee_date" id="guarantee_date" required value="{{ shift.start_date|date:'Y-m-d' }}"/>
+</div>
+              <div class="input-group">
+                <label for="residence">Guarantor's Residence</label>
+                <input type="text" name="residence" id="residence" required />
+              </div>
+
+              <h2>Collateral Information</h2>
+              <input type="hidden" id="item_count" name="item_count" value="0">
+    <div id="collateral-items"></div>
+    <button type="button" onclick="addCollateralItem()">Add Collateral Item</button>
+
+    <br><br>
+
+    <input type="submit" value="Submit" class="btn" />
+            </form>
+
+            <script>
+  let itemCount = 0;
+
+  function addCollateralItem() {
+    if (itemCount < 3) {
+      itemCount++;
+      document.getElementById('item_count').value = itemCount; // Update item count
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'collateral-item';
+      itemDiv.innerHTML = `
+        <h3>Item ${itemCount}</h3>
+        <label for="item-name-${itemCount}">Name of Item:</label>
+        <input type="text" id="item-name-${itemCount}" name="item-name-${itemCount}" required><br><br>
+        <label for="item-description-${itemCount}">Short Description:</label>
+        <textarea id="item-description-${itemCount}" name="item-description-${itemCount}" rows="3" style="resize: vertical; width: 100%;" required></textarea><br><br>
+        <label>Photos of Item:</label><br>
+        <input type="file" name="item-photo-${itemCount}-1" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-2" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-3" accept="image/*" required><br><br>
+        <input type="file" name="item-photo-${itemCount}-4" accept="image/*" required><br><br>
+      `;
+      document.getElementById('collateral-items').appendChild(itemDiv);
+    } else {
+      alert('You can only add up to 3 collateral items.');
+    }
+  }
+</script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
