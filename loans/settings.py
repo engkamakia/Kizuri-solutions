@@ -97,7 +97,16 @@ DATABASES = {
 
 
 #database_url = os.environ.get("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render")
-DATABASES["default"] = dj_database_url.parse("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render" )
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'kizuri_django_render',  # Database name
+        'USER': 'kizuri_django_render_user',  # Username
+        'PASSWORD': 'nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR',  # Password
+        'HOST': 'dpg-cr7bmla3esus738688lg-a',  # Host
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}'''
 
 '''
 DATABASES = {
