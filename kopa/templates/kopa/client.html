@@ -48,7 +48,7 @@
         <div class="col-lg-8">
           <div class="apply-wrapper">
             <!-- Form -->
-            <form method="post" action="{% url 'client' %}" class="needs-validation" novalidate>
+            <form method="post" action="{% url 'client' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
               {% csrf_token %}
 
               

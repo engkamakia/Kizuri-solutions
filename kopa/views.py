@@ -180,72 +180,98 @@ def parse_date(date_str):
     except ValueError:
         return None
     
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseServerError
+from django.shortcuts import render
+from django.utils.dateparse import parse_date
+from .models import ClientInfo, Guarantor, Collateral
+
 @login_required
 def guarantor_view(request):
     if request.method == 'POST':
         try:
+            # Parse the guarantee date
             guarantee_date_str = request.POST.get('guarantee_date', '')
             guarantee_date = parse_date(guarantee_date_str)
             
-            print("Received form data:", request.POST)  # Debugging statement
-            print(request.POST)
+            # Debugging statements to check form data and current user
+            print("Received form data:", request.POST)
+            print("Received files:", request.FILES)
+            print("Current logged-in user:", request.user)
             
-            # Print all other form data for debugging
-            
-            # Get the ClientInfo associated with the logged-in user
-            try:
-                client_info = ClientInfo.objects.get(user=request.user)
-                
-            except ClientInfo.DoesNotExist:
+             # Get the ClientInfo associated with the logged-in user
+            client_infos = ClientInfo.objects.filter(user=request.user)
+            if client_infos.count() > 1:
+                # Handle multiple ClientInfo objects, e.g., choose the first one
+                client_info = client_infos.first()
+                print("Multiple ClientInfo found. Using the first one.")
+            elif client_infos.exists():
+                client_info = client_infos.get()
+            else:
+                print("Client information not found for this user.")
                 return HttpResponseServerError("Client information not found for this user.")
-            # ...
-
             # Save Guarantor information
-            guarantor = Guarantor.objects.create(
-                client_info=client_info,
-                full_name=request.POST.get('full_name', ''),
-                nick_name=request.POST.get('nick_name', ''),
-                id_number=request.POST.get('id_number', ''),
-                phone1=request.POST.get('phone1', ''),
-                phone2=request.POST.get('phone2', ''),
-                email=request.POST.get('email', ''),
-                face_image = request.FILES.get('image'),
-                guarantee_name=request.POST.get('guarantee_name', ''),
-                loan_amount=request.POST.get('loan_amount', ''),
-                loan_amount_words=request.POST.get('loan_amount_words', ''),
-                guarantee_date=guarantee_date,
-                residence=request.POST.get('residence', ''),
-                id_photo = request.FILES.get('image'),
-            )
-
-            # Handle collateral items
-            item_count = int(request.POST.get('item_count', 0))
-            for i in range(1, item_count + 1):
-                item_name = request.POST.get(f'item-name-{i}', '')
-                item_description = request.POST.get(f'item-description-{i}', '')
-                photo1 = request.FILES.get(f'item-photo-{i}-1')
-                photo2 = request.FILES.get(f'item-photo-{i}-2')
-                photo3 = request.FILES.get(f'item-photo-{i}-3')
-                photo4 = request.FILES.get(f'item-photo-{i}-4')
-
-                Collateral.objects.create(
-                    guarantor=guarantor,
-                    item_name=item_name,
-                    item_description=item_description,
-                    photo1=photo1,
-                    photo2=photo2,
-                    photo3=photo3,
-                    photo4=photo4,
+            if Guarantor.objects.filter(client_info=client_info).exists():
+                messages.error(request, "A Guarantor already exists for this client.")
+                print("A Guarantor already exists for this client.")
+                return render(request, 'kopa/guarantor.html')
+            try:
+                guarantor = Guarantor.objects.create(
+                    client_info=client_info,
+                    full_name=request.POST.get('full_name', ''),
+                    nick_name=request.POST.get('nick_name', ''),
+                    id_number=request.POST.get('id_number', ''),
+                    phone1=request.POST.get('phone1', ''),
+                    phone2=request.POST.get('phone2', ''),
+                    email=request.POST.get('email', ''),
+                    face_image=request.FILES.get('image'),
+                    guarantee_name=request.POST.get('guarantee_name', ''),
+                    loan_amount=request.POST.get('loan_amount', ''),
+                    loan_amount_words=request.POST.get('loan_amount_words', ''),
+                    guarantee_date=guarantee_date,
+                    residence=request.POST.get('residence', ''),
+                    id_photo=request.FILES.get('image'),
                 )
+                print("Guarantor saved successfully.")
+            except Exception as e:
+                print(f"Error creating Guarantor: {e}")
+                return HttpResponseServerError("An error occurred while saving Guarantor information.")
             
-            print("Guarantor and collateral items saved successfully")
+            # Handle collateral items
+            try:
+                item_count = int(request.POST.get('item_count', 0))
+                for i in range(1, item_count + 1):
+                    item_name = request.POST.get(f'item-name-{i}', '')
+                    item_description = request.POST.get(f'item-description-{i}', '')
+                    photo1 = request.FILES.get(f'item-photo-{i}-1')
+                    photo2 = request.FILES.get(f'item-photo-{i}-2')
+                    photo3 = request.FILES.get(f'item-photo-{i}-3')
+                    photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                    Collateral.objects.create(
+                        guarantor=guarantor,
+                        item_name=item_name,
+                        item_description=item_description,
+                        photo1=photo1,
+                        photo2=photo2,
+                        photo3=photo3,
+                        photo4=photo4,
+                    )
+                    print(f"Collateral item {i} saved successfully.")
+                
+                print("All collateral items saved successfully.")
+            except Exception as e:
+                print(f"Error creating Collateral items: {e}")
+                return HttpResponseServerError("An error occurred while saving collateral items.")
+            
             return HttpResponse("Form submitted successfully!")
 
         except Exception as e:
             print(f"An error occurred: {e}")
-            return HttpResponseServerError("An error occurred while processing the form.")
+            return render(request, 'kopa/guarantor.html')
     
     return render(request, 'kopa/guarantor.html')
+
 
 
 def safe_decimal(value, default='0'):

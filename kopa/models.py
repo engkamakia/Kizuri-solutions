@@ -7,6 +7,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth import get_user_model
 import uuid
+from cloudinary.models import CloudinaryField
 
 
 '''
@@ -117,7 +118,7 @@ class ClientInfo(models.Model):
     #national_id = models.CharField(max_length=20)
     phone1 = models.CharField(max_length=15)
     phone2 = models.CharField(max_length=15, blank=True, null=True)
-    image = models.ImageField(upload_to='images/')
+    image = CloudinaryField('client_image')
     #email = models.EmailField()
     employment_status = models.CharField(
         max_length=20,
@@ -206,7 +207,7 @@ class ResidenceInfo(models.Model):
 
 class CRBInfo(models.Model):
     client = models.OneToOneField(ClientInfo, on_delete=models.CASCADE, related_name='crb_info')
-    image = models.ImageField(upload_to='collateral_photos/')
+    image = CloudinaryField('signature_pic')
     agree_to_terms = models.BooleanField(default=False, verbose_name="Agree to Terms and Conditions")
     authorization_text = models.TextField(default="I authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.")
     
@@ -226,13 +227,13 @@ class Guarantor(models.Model):
     phone1 = models.CharField(max_length=15)
     phone2 = models.CharField(max_length=15, blank=True)
     email = models.EmailField()
-    face_image = models.ImageField(upload_to='collateral_photos/')
+    face_image = CloudinaryField('guarantor_face')
     guarantee_name = models.CharField(max_length=255)
     loan_amount = models.DecimalField(max_digits=12, decimal_places=2)
     loan_amount_words = models.CharField(max_length=255)
     guarantee_date = models.DateField(null=True, blank=True)
     residence = models.CharField(max_length=255)
-    id_photo = models.ImageField(upload_to='collateral_photos/')
+    id_photo = CloudinaryField('guarantor_sinature')
     
     
     class Meta:        
@@ -246,10 +247,10 @@ class Collateral(models.Model):
     guarantor = models.ForeignKey(Guarantor, on_delete=models.CASCADE, related_name='collaterals')
     item_name = models.CharField(max_length=255)
     item_description = models.TextField()
-    photo1 = models.ImageField(upload_to='collateral_photos/')
-    photo2 = models.ImageField(upload_to='collateral_photos/')
-    photo3 = models.ImageField(upload_to='collateral_photos/')
-    photo4 = models.ImageField(upload_to='collateral_photos/')
+    photo1 = CloudinaryField('guarantor_collateral')
+    photo2 = CloudinaryField('guarantor_collateral')
+    photo3 = CloudinaryField('guarantor_collateral')
+    photo4 = CloudinaryField('guarantor_collateral')
     
     class Meta:        
         verbose_name_plural = "Collaterals"              
