@@ -63,6 +63,10 @@
                 <input type="email" name="email" id="email" required />
               </div>
               <div class="input-group">
+  <label for="image">Upload photo of your face</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
+              <div class="input-group">
                 <label for="guarantee_name">Wish to Guarantee (Full Name)</label>
                 <input type="text" name="guarantee_name" id="guarantee_name" required />
               </div>
@@ -86,7 +90,11 @@
               <h2>Collateral Information</h2>
               <input type="hidden" id="item_count" name="item_count" value="0">
     <div id="collateral-items"></div>
-    <button type="button" onclick="addCollateralItem()">Add Collateral Item</button>
+    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
+    <div class="input-group">
+  <label for="image">Upload photo of your signature</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
 
     <br><br>
 

@@ -50,6 +50,17 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from .decorators import login_required  # Import the decorator
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib import messages
+from .models import CustomUser
+from django.contrib.auth.backends import ModelBackend
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+
 
 
 # Create your views here.
@@ -93,51 +104,8 @@ def success(request):
 
 
 
-'''
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import CustomUser
-
-def sign_up(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        id_number = request.POST.get('id_number')
-        password = request.POST.get('password1')
-        confirm_password = request.POST.get('password2')
-        
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match")
-            return redirect('registration')
-
-        # Create the user
-        user = CustomUser.objects.create_user(
-            username=username,
-            email=email,
-            first_name=first_name,
-            last_name=last_name,
-            id_number=id_number,
-            password=password
-        )
-
-        messages.success(request, "User created successfully")
-        return redirect('home')
-    
-    return render(request, 'kopa/registration.html')
 
 
-
-
-
-'''
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib import messages
-from .models import CustomUser
-from django.contrib.auth.backends import ModelBackend
 
 def sign_up(request):
     if request.method == 'POST':
@@ -173,9 +141,8 @@ def sign_up(request):
     return render(request, 'kopa/registration.html')
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
+
+
 
 def sign_in(request):
     if request.method == 'POST':
@@ -192,6 +159,8 @@ def sign_in(request):
             messages.error(request, 'Invalid email, Id or password')
     
     return render(request, 'kopa/login.html')
+
+
 
 
 @login_required
@@ -219,11 +188,14 @@ def guarantor_view(request):
             guarantee_date = parse_date(guarantee_date_str)
             
             print("Received form data:", request.POST)  # Debugging statement
+            print(request.POST)
+            
             # Print all other form data for debugging
             
             # Get the ClientInfo associated with the logged-in user
             try:
                 client_info = ClientInfo.objects.get(user=request.user)
+                
             except ClientInfo.DoesNotExist:
                 return HttpResponseServerError("Client information not found for this user.")
             # ...
@@ -237,11 +209,13 @@ def guarantor_view(request):
                 phone1=request.POST.get('phone1', ''),
                 phone2=request.POST.get('phone2', ''),
                 email=request.POST.get('email', ''),
+                face_image = request.FILES.get('image'),
                 guarantee_name=request.POST.get('guarantee_name', ''),
                 loan_amount=request.POST.get('loan_amount', ''),
                 loan_amount_words=request.POST.get('loan_amount_words', ''),
                 guarantee_date=guarantee_date,
                 residence=request.POST.get('residence', ''),
+                id_photo = request.FILES.get('image'),
             )
 
             # Handle collateral items
@@ -308,6 +282,7 @@ def client_submission_form(request):
                 #national_id=request.POST.get('NationalId', ''),
                 phone1=request.POST.get('phone1', ''),
                 phone2=request.POST.get('phone2', ''),
+                image = request.FILES.get('image'),
                 #email=request.POST.get('email', ''),
                 employment_status=request.POST.get('employment-status', ''),
                 employer_name=request.POST.get('employer-name', ''),
@@ -331,6 +306,27 @@ def client_submission_form(request):
                 total=safe_decimal(request.POST.get('total', '')),
                 repay_date=request.POST.get('repay_date', '')
             )
+            item_count = int(request.POST.get('item_count', 0))
+            for i in range(1, item_count + 1):
+                item_name = request.POST.get(f'item-name-{i}', '')
+                item_description = request.POST.get(f'item-description-{i}', '')
+                photo1 = request.FILES.get(f'item-photo-{i}-1')
+                photo2 = request.FILES.get(f'item-photo-{i}-2')
+                photo3 = request.FILES.get(f'item-photo-{i}-3')
+                photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                Client_Collateral.objects.create(
+                    client=client_info,
+                    item_name=item_name,
+                    item_description=item_description,
+                    photo1=photo1,
+                    photo2=photo2,
+                    photo3=photo3,
+                    photo4=photo4,
+                )
+            
+            print("client collateral items saved successfully")
+           
             
             # Spouse Info
             SpouseInfo.objects.create(
@@ -352,14 +348,15 @@ def client_submission_form(request):
             # Residence Info
             ResidenceInfo.objects.create(
                 client=client_info,
-                permanent_residence=request.POST.get('permanent_residence', ''),
-                temporary_residence=request.POST.get('temporary_residence', ''),
+                residence_type = request.POST.get('residence_type', ''),
+                residence_description = request.POST.get('residence_description', ''),
                 rural_residence=request.POST.get('rural_residence', '')
             )
 
             # CRB Info
             CRBInfo.objects.create(
                 client=client_info,
+                image = request.FILES.get('image'),
                 agree_to_terms = request.POST.get('agree_to_terms') == 'on'  # Checkbox returns 'on' if checked, otherwise None
             )
             #return HttpResponse("Form submitted successfully!")

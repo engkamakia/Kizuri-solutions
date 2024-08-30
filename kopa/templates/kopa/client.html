@@ -13,6 +13,21 @@
     .conditional-section {
       display: none;
     }
+
+    .border-box {
+    border: 2px solid #000; /* Black border, you can change the color and thickness as needed */
+    padding: 10px; /* Space between the border and the text */
+    margin: 10px 0; /* Space around the border box */
+    border-radius: 5px; /* Rounded corners, remove if you prefer square corners */
+    background-color: #f9f9f9; /* Light background color, change as needed */
+  }
+
+   .input-group {
+            margin-bottom: 15px;
+        }
+        #residence_description {
+            display: none;
+        }
   </style>
 
   <!-- Apply Area Start -->
@@ -80,6 +95,10 @@
                   <label for="phone2">Phone 2 <i>(optional)</i></label>
                   <input type="text" name="phone2" id="phone2" />
                 </div>
+                <div class="input-group">
+  <label for="image">Upload photo of your face</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
                 <!--<div class="input-group">
                   <label for="email">Email</label>
                   <input type="text" name="email" id="email" />
@@ -283,7 +302,7 @@
 
                   
   <div class="">
-    <label for="parent-type">Parent Type: 
+    <label for="parent-type">Parent Details: 
       <i>(Kindly select from the options below)</i>
     </label>
     <select id="parent-type" name="parent-type" onchange="showParentFields()">
@@ -327,30 +346,25 @@
                 </div>
               </div>
               <div class="form-step">
-                <h5 class="text-center"><b>RESIDENCE INFORMATION<b></h5>
-                <div class="input-group">
-                  <label for="permanent_residence"
-                    >Applicants permanent residence:</label
-                  >
-                  <input
-                    type="text"
-                    id="permanent_residence"
-                    name="permanent_residence"
-                    placeholder="eg. Ngoingwa, Thika"
-                  />
-                </div>
-                <div class="input-group">
-                  <label for="temporary_residence"
-                    >Applicants temporary residence:<i>(if any)</i></label
-                  >
-                  <input
-                    type="text"
-                    id="temporary_residence"
-                    name="temporary_residence"
-                    placeholder="eg. Ngoingwa, Thika"
-                  />
-                </div>
-                <div class="input-group">
+                <h5 class="text-center"><b>RESIDENCE INFORMATION</b></h5>
+    <div class="input-group">
+        <label for="residence_type">Select your residence type:</label>
+        <select id="residence_type" name="residence_type" onchange="showDescriptionField()">
+            <option value="">--Select--</option>
+            <option value="permanent">Permanent Residence</option>
+            <option value="temporary">Temporary Residence</option>
+        </select>
+    </div>
+    <div id="residence_description" class="input-group">
+        <label for="residence_description_input">Description:</label>
+        <input
+            type="text"
+            id="residence_description_input"
+            name="residence_description"
+            placeholder="e.g. Ngoingwa, Thika"
+        />
+    </div>
+    <div class="input-group">
                   <label for="rural_residence"
                     >Applicants rural residence:<i>(if any)</i></label
                   >
@@ -360,7 +374,19 @@
                     name="rural_residence"
                     placeholder="eg. Ngoingwa, Thika"
                   />
-                </div>
+                </div> 
+    <script>
+        function showDescriptionField() {
+            var residenceType = document.getElementById('residence_type').value;
+            var descriptionField = document.getElementById('residence_description');
+
+            if (residenceType) {
+                descriptionField.style.display = 'block';
+            } else {
+                descriptionField.style.display = 'none';
+            }
+        }
+    </script>
 
                 <div class="btns-group">
                   <a href="#" class="btn btn-prev">Previous</a>
@@ -368,19 +394,26 @@
                 </div>
               </div>
               <div class="form-step">
+                 <h5 class="text-center"><b>COLLATERAL INFORMATION</b></h5>
 
-                <h5 class="text-center"><b>Collateral Information<b></h5>
+              <label>Upload upto three collateral items</label>
               <input type="hidden" id="item_count" name="item_count" value="0">
     <div id="collateral-items"></div>
-    <p>you can add upto three collateral items</p>
     <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
     
+    <div class="input-group">
+  <label for="image">Upload photo of your signature</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
 
-    <br><br><br><br>
+
+    
+
+    <br><br>
                 
                 <!--<h5 class="text-center"><b>CRB INFORMATION<b></h5>-->
-                <p>
-                  I <b>{{request.user.first_name}}</b> of ID number <b>{{request.user.id_number}} </b> Authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.
+                <p class="border-box">
+                  <b>I <i>{{request.user.first_name}} </i>of ID number <i>{{request.user.id_number}} </i> Authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.</b>
                   
                 </p>
 

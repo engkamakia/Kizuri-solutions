@@ -117,6 +117,7 @@ class ClientInfo(models.Model):
     #national_id = models.CharField(max_length=20)
     phone1 = models.CharField(max_length=15)
     phone2 = models.CharField(max_length=15, blank=True, null=True)
+    image = models.ImageField(upload_to='images/')
     #email = models.EmailField()
     employment_status = models.CharField(
         max_length=20,
@@ -153,7 +154,7 @@ class SpouseInfo(models.Model):
     client = models.OneToOneField(ClientInfo, on_delete=models.CASCADE, related_name='spouse_info')
     marital_status = models.CharField(
         max_length=20,
-        choices=[('Married', 'Married'), ('Single', 'Single')]
+        choices=[('married', 'married'), ('single', 'single')]
     )
     spouse_name = models.CharField(max_length=255, blank=True, null=True)
     work_place = models.CharField(max_length=255, blank=True, null=True)
@@ -183,9 +184,18 @@ class SpouseInfo(models.Model):
 
 class ResidenceInfo(models.Model):
     client = models.OneToOneField(ClientInfo, on_delete=models.CASCADE, related_name='residence_info')
-    permanent_residence = models.CharField(max_length=255)
-    temporary_residence = models.CharField(max_length=255, blank=True, null=True)
-    rural_residence = models.CharField(max_length=255, blank=True, null=True)
+    RESIDENCE_TYPE_CHOICES = [
+        ('permanent', 'Permanent Residence'),
+        ('temporary', 'Temporary Residence'),
+    ]
+    
+    residence_type = models.CharField(
+        max_length=20,
+        choices=RESIDENCE_TYPE_CHOICES,
+        blank=True,
+    )
+    residence_description = models.CharField(max_length=255, blank=True, null=True)
+    rural_residence = models.TextField(max_length = 450,null = True, blank = True)
     
     class Meta:        
         verbose_name_plural = "Residence information"              
@@ -196,6 +206,7 @@ class ResidenceInfo(models.Model):
 
 class CRBInfo(models.Model):
     client = models.OneToOneField(ClientInfo, on_delete=models.CASCADE, related_name='crb_info')
+    image = models.ImageField(upload_to='collateral_photos/')
     agree_to_terms = models.BooleanField(default=False, verbose_name="Agree to Terms and Conditions")
     authorization_text = models.TextField(default="I authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.")
     
@@ -215,11 +226,14 @@ class Guarantor(models.Model):
     phone1 = models.CharField(max_length=15)
     phone2 = models.CharField(max_length=15, blank=True)
     email = models.EmailField()
+    face_image = models.ImageField(upload_to='collateral_photos/')
     guarantee_name = models.CharField(max_length=255)
     loan_amount = models.DecimalField(max_digits=12, decimal_places=2)
     loan_amount_words = models.CharField(max_length=255)
     guarantee_date = models.DateField(null=True, blank=True)
     residence = models.CharField(max_length=255)
+    id_photo = models.ImageField(upload_to='collateral_photos/')
+    
     
     class Meta:        
         verbose_name_plural = "Guarantors"              
@@ -242,5 +256,20 @@ class Collateral(models.Model):
     
     def __str__(self):
         return f" {self.guarantor} "
+    
+class Client_Collateral(models.Model):
+    client = models.ForeignKey(ClientInfo, on_delete=models.CASCADE, related_name='client_collaterals')
+    item_name = models.CharField(max_length=255)
+    item_description = models.TextField()
+    photo1 = models.ImageField(upload_to='collateral_photos/')
+    photo2 = models.ImageField(upload_to='collateral_photos/')
+    photo3 = models.ImageField(upload_to='collateral_photos/')
+    photo4 = models.ImageField(upload_to='collateral_photos/')
+    
+    class Meta:        
+        verbose_name_plural = "Client Collaterals"              
+    
+    def __str__(self):
+        return f" {self.client} "
     
     
