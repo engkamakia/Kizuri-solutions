@@ -760,21 +760,26 @@ def client_submission_form(request):
     
     return render(request, 'kopa/client.html')  # Replace with your template
 '''
-
 @login_required
 def client_profile(request, client_id):
-    # Retrieve the client using the provided client_id
+    # Retrieve the profile using the provided client_id
     profile = get_object_or_404(Profile, id=client_id)
     
-    # Fetch the associated guarantors
-    guarantors = profile.guarantors.all()
+    # Fetch the associated data
+    loan_infos = profile.loan_infos.all()
+    spouse_info = profile.spouse_info
     residence_info = profile.residence_info
+    #guarantors = profile.guarantors.all()
+    client_collaterals = [loan.client_collaterals.all() for loan in loan_infos]
 
-    # Pass the client and guarantors data to the template context
+    # Pass the client and related data to the template context
     context = {
         'profile': profile,
-        'guarantors': guarantors,
+        'loan_infos': loan_infos,
+        'spouse_info': spouse_info,
         'residence_info': residence_info,
+        #'guarantors': guarantors,
+        'client_collaterals': client_collaterals,
     }
     
     return render(request, 'kopa/profile.html', context)

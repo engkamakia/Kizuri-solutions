@@ -78,7 +78,7 @@ body{
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>{{ client.full_name  }}</h4>
+                      <h4>{{ profile.user.full_name  }}</h4>
                       <!--<p class="text-secondary mb-1">Full Stack Developer</p>
                       <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                       <button class="btn btn-primary">Follow</button>
@@ -121,7 +121,7 @@ body{
         <h6 class="mb-0">Full name</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.full_name  }}
+        {{ profile.user.full_name  }}
       </div>
     </div>
     <hr>
@@ -130,7 +130,7 @@ body{
         <h6 class="mb-0">ID number</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.national_id  }}
+        {{ profile.user.national_id  }}
       </div>
     </div>
     <hr>
@@ -139,7 +139,7 @@ body{
         <h6 class="mb-0">Email</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.email  }}
+        {{ profile.user.email  }}
       </div>
     </div>
     <hr>
@@ -148,7 +148,7 @@ body{
         <h6 class="mb-0">Phone 1</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.phone1  }}
+        {{ profile.user.phone1  }}
       </div>
     </div>
     <hr>
@@ -157,7 +157,7 @@ body{
         <h6 class="mb-0">Phone 2</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.phone2  }}
+        {{ profile.user.phone2  }}
       </div>
     </div>
     <hr>
@@ -234,17 +234,17 @@ body{
         <h6 class="mb-0">Marital status</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.spouse_info.marital_status }}
+        {{ spouse_info.marital_status }}
       </div>
     </div>
     <hr>
-    {% if client.spouse_info.marital_status == 'married' %}
+    {% if spouse_info.marital_status == 'married' %}
     <div class="row">
       <div class="col-sm-3">
         <h6 class="mb-0">No of dependants</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.spouse_info.no_of_dependants }}
+        {{ spouse_info.no_of_dependants }}
       </div>
     </div>
     <hr>
@@ -253,7 +253,7 @@ body{
         <h6 class="mb-0">Spouse name</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.spouse_info.spouse_name }}
+        {{ spouse_info.spouse_name }}
       </div>
     </div>
     <hr>
@@ -262,7 +262,7 @@ body{
         <h6 class="mb-0">Spouse work place</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.spouse_info.work_place }}
+        {{ spouse_info.work_place }}
       </div>
     </div>
     <hr>
@@ -271,7 +271,7 @@ body{
         <h6 class="mb-0">spouse employment position</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-       {{ client.spouse_info.work_place }}
+       {{ spouse_info.work_place }}
       </div>
     </div>
     <hr>
@@ -280,7 +280,7 @@ body{
         <h6 class="mb-0">spouse contact</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ client.spouse_info.contact }}
+        {{ spouse_info.contact }}
       </div>
     </div>
     {% endif %}
