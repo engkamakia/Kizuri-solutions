@@ -3,6 +3,16 @@
 {% block content %}
 
 <main>
+      <style>
+    
+        .custom-alert.error {
+    background-color: #e74c3c;
+}
+
+.custom-alert.success {
+    background-color: #2ecc71;
+}
+  </style>
 
         <!-- slider Area Start-->
         <div class="slider-area slider-height" data-background="assets/img/hero/h1_hero.jpg">
@@ -12,6 +22,16 @@
                     <div class="slider-cap-wrapper">
                         <div class="hero__caption">
                             <p data-animation="fadeInLeft" data-delay=".2s">Achieve your financial goal</p>
+                             <!-- Display messages -->
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
                             <h1 data-animation="fadeInLeft" data-delay=".5s">Small Business Loans For Daily Expenses.</h1>
                             <!-- Hero Btn -->
                             <a href="apply.html" class="btn hero-btn" data-animation="fadeInLeft" data-delay=".8s">Apply for Loan</a>

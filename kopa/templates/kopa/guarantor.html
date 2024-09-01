@@ -51,7 +51,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-8">
           <div class="apply-wrapper">
-            <form method="post" action="{% url 'guarantor' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form method="post" action="{% url 'guarantor' loan_id=loan_info.id %}" enctype="multipart/form-data" class="needs-validation" novalidate>
               {% csrf_token %}
 
               <h1 class="text-center">GUARANTOR INFO</h1>

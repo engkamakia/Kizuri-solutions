@@ -166,10 +166,10 @@ def sign_in(request):
 @login_required
 def client_info_view(request):
     # Fetch all ClientInfo records
-    clients = ClientInfo.objects.all()
+    profile = Profile.objects.all()
     
     # Render the template with the client data
-    return render(request, 'kopa/dashboard.html', {'clients': clients})
+    return render(request, 'kopa/dashboard.html', {'profile': profile})
     
     
    
@@ -184,8 +184,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import render
 from django.utils.dateparse import parse_date
-from .models import ClientInfo, Guarantor, Collateral
+#from .models import ClientInfo, Guarantor, Collateral
 
+'''
 @login_required
 def guarantor_view(request):
     if request.method == 'POST':
@@ -415,3 +416,373 @@ def client_profile(request, client_id):
     }
     
     return render(request, 'kopa/profile.html', context)
+    
+    
+    '''
+    
+    
+@login_required
+def guarantor_view(request, loan_id):
+    context = {}
+    if request.method == 'POST':
+        try:
+            # Parse the guarantee date
+            guarantee_date_str = request.POST.get('guarantee_date', '')
+            guarantee_date = parse_date(guarantee_date_str)
+            
+            # Get the Profiles associated with the logged-in user
+            #print(f"Loan Info ID: {loan_id}")
+            loan_info = get_object_or_404(LoanInfo, id=loan_id)
+            context['loan_info'] = loan_info
+            #loan_info = LoanInfo.objects.filter(user=request.user).latest('date_of_loan')
+            
+            # Save Guarantor information
+            guarantor = Guarantor.objects.create(
+                loan_info= loan_info,
+                full_name=request.POST.get('full_name', ''),
+                nick_name=request.POST.get('nick_name', ''),
+                id_number=request.POST.get('id_number', ''),
+                phone1=request.POST.get('phone1', ''),
+                phone2=request.POST.get('phone2', ''),
+                email=request.POST.get('email', ''),
+                face_image=request.FILES.get('image'),
+                guarantee_name=request.POST.get('guarantee_name', ''),
+                loan_amount=request.POST.get('loan_amount', ''),
+                loan_amount_words=request.POST.get('loan_amount_words', ''),
+                guarantee_date=guarantee_date,
+                residence=request.POST.get('residence', ''),
+                id_photo=request.FILES.get('image'),
+            )
+            print("Guarantor saved successfully.")
+            
+            # Handle collateral items
+            item_count = int(request.POST.get('item_count', 0))
+            for i in range(1, item_count + 1):
+                item_name = request.POST.get(f'item-name-{i}', '')
+                item_description = request.POST.get(f'item-description-{i}', '')
+                photo1 = request.FILES.get(f'item-photo-{i}-1')
+                photo2 = request.FILES.get(f'item-photo-{i}-2')
+                photo3 = request.FILES.get(f'item-photo-{i}-3')
+                photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                Collateral.objects.create(
+                    guarantor=guarantor,
+                    item_name=item_name,
+                    item_description=item_description,
+                    photo1=photo1,
+                    photo2=photo2,
+                    photo3=photo3,
+                    photo4=photo4,
+                )
+                print(f"Collateral item {i} saved successfully.")
+                
+            print("All collateral items saved successfully.")
+            messages.success(request, "guarantor information submitted successfully.")
+            return redirect('home')
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            messages.error("An error occurred while saving Guarantor information.")
+            
+    loan_info = get_object_or_404(LoanInfo, id=loan_id)
+    context['loan_info'] = loan_info
+    return render(request, 'kopa/guarantor.html', context)
+
+
+def safe_decimal(value, default='0'):
+    try:
+        return Decimal(value)
+    except InvalidOperation:
+        return Decimal(default)
+
+def safe_int(value, default=0):
+    try:
+        return int(value)
+    except ValueError:
+        return default
+
+
+#from django.contrib.auth import get_user_model
+
+def client_submission_form(request):
+    user = CustomUser.objects.get(id=request.user.id)
+
+    try:
+        # Check if the user already has a profile
+        existing_profile = Profile.objects.filter(user=user).first()
+        
+        if request.method == 'POST':
+            # If there's an existing profile, update it instead of creating a new one
+            if existing_profile:
+                profile = existing_profile
+            else:
+                profile = Profile.objects.create(
+                    user=user,
+                    nickname=request.POST.get('Nickname', ''),
+                    phone1=request.POST.get('phone1', ''),
+                    phone2=request.POST.get('phone2', ''),
+                    image=request.FILES.get('image'),
+                    employment_status=request.POST.get('employment-status', ''),
+                    employer_name=request.POST.get('employer-name', ''),
+                    job_title=request.POST.get('job-title', ''),
+                    location_of_work=request.POST.get('location_of_work', ''),
+                    supervisors_name=request.POST.get('supervisors_name', ''),
+                    supervisors_contact=request.POST.get('supervisors_contact', ''),
+                    monthly_income=safe_decimal(request.POST.get('monthly_income', '')),
+                    monthly_expense=safe_decimal(request.POST.get('monthly_expense', '')),
+                    business_name=request.POST.get('business-name', ''),
+                    industry_type=request.POST.get('industry-type', ''),
+                    business_location=request.POST.get('business_location', ''),
+                    daily_income=safe_decimal(request.POST.get('daily_income', '')),
+                    daily_expense=safe_decimal(request.POST.get('daily_expense', '')),
+                    net_income=safe_decimal(request.POST.get('net_income', '')),
+                )
+            
+            loan_info = LoanInfo.objects.create(
+                profile=profile,
+                loan_amount=safe_decimal(request.POST.get('loan_amount', '')),
+                amount_in_words=request.POST.get('amount_in_words', ''),
+                date_of_loan=request.POST.get('date_of_loan', ''),
+                repay_principal=safe_decimal(request.POST.get('repay_principal', '')),
+                interest=request.POST.get('interest', ''),
+                total=safe_decimal(request.POST.get('total', '')),
+                repay_date=request.POST.get('repay_date', '')
+            )
+            
+            item_count = int(request.POST.get('item_count', 0))
+            for i in range(1, item_count + 1):
+                item_name = request.POST.get(f'item-name-{i}', '')
+                item_description = request.POST.get(f'item-description-{i}', '')
+                photo1 = request.FILES.get(f'item-photo-{i}-1')
+                photo2 = request.FILES.get(f'item-photo-{i}-2')
+                photo3 = request.FILES.get(f'item-photo-{i}-3')
+                photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                Client_Collateral.objects.create(
+                    loan_info=loan_info,
+                    item_name=item_name,
+                    item_description=item_description,
+                    photo1=photo1,
+                    photo2=photo2,
+                    photo3=photo3,
+                    photo4=photo4,
+                )
+
+            if existing_profile:
+                SpouseInfo.objects.filter(profile=profile).update(
+                    marital_status=request.POST.get('marital-status', existing_profile.spouse_info.marital_status),
+                    spouse_name=request.POST.get('spouse-name', existing_profile.spouse_info.spouse_name),
+                    work_place=request.POST.get('work_place', existing_profile.spouse_info.work_place),
+                    position=request.POST.get('position', existing_profile.spouse_info.position),
+                    contact=request.POST.get('contact', existing_profile.spouse_info.contact),
+                    no_of_dependants=safe_int(request.POST.get('no_of_dependants', existing_profile.spouse_info.no_of_dependants)),
+                    parent_type=request.POST.get('parent-type', existing_profile.spouse_info.parent_type),
+                    father_full_name=request.POST.get('father-full-name', existing_profile.spouse_info.father_full_name),
+                    father_contact=request.POST.get('father-contact', existing_profile.spouse_info.father_contact),
+                    mother_full_name=request.POST.get('mother-full-name', existing_profile.spouse_info.mother_full_name),
+                    mother_contact=request.POST.get('mother-contact', existing_profile.spouse_info.mother_contact),
+                    nextofkin=request.POST.get('nextofkin', existing_profile.spouse_info.nextofkin),
+                )
+            else:
+                SpouseInfo.objects.create(
+                    profile=profile,
+                    marital_status=request.POST.get('marital-status', ''),
+                    spouse_name=request.POST.get('spouse-name', ''),
+                    work_place=request.POST.get('work_place', ''),
+                    position=request.POST.get('position', ''),
+                    contact=request.POST.get('contact', ''),
+                    no_of_dependants=safe_int(request.POST.get('no_of_dependants', '')),
+                    parent_type=request.POST.get('parent-type', ''),
+                    father_full_name=request.POST.get('father-full-name', ''),
+                    father_contact=request.POST.get('father-contact', ''),
+                    mother_full_name=request.POST.get('mother-full-name', ''),
+                    mother_contact=request.POST.get('mother-contact', ''),
+                    nextofkin=request.POST.get('nextofkin', ''),
+                )
+            
+            if existing_profile:
+                ResidenceInfo.objects.filter(profile=profile).update(
+                    residence_type=request.POST.get('residence_type', existing_profile.residence_info.residence_type),
+                    residence_description=request.POST.get('residence_description', existing_profile.residence_info.residence_description),
+                    rural_residence=request.POST.get('rural_residence', existing_profile.residence_info.rural_residence),
+                )
+            else:
+                ResidenceInfo.objects.create(
+                    profile=profile,
+                    residence_type=request.POST.get('residence_type', ''),
+                    residence_description=request.POST.get('residence_description', ''),
+                    rural_residence=request.POST.get('rural_residence', '')
+                )
+
+            CRBInfo.objects.create(
+                loan_info=loan_info,
+                image=request.FILES.get('image'),
+                agree_to_terms=request.POST.get('agree_to_terms') == 'on'
+            )
+
+            messages.success(request, "Client information submitted successfully.")
+            print(f"Redirecting to guarantor with loan_id: {loan_info.id}")
+            if loan_info:
+                return redirect('guarantor', loan_id=loan_info.id)
+            else:
+                messages.error(request, "Failed to create loan information.")
+                return redirect('client_form')
+
+        context = {
+            'existing_profile': existing_profile
+        }
+        return render(request, 'kopa/client.html', context)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return HttpResponseServerError("An error occurred while processing the form.")
+
+
+
+'''   
+@login_required
+def client_submission_form(request):
+    if request.method == 'POST':
+        print(request.user.first_name)
+        try:
+            # Get the logged-in user
+            user = CustomUser.objects.get(id=request.user.id)
+            
+            
+            
+           
+            
+            # Create ClientInfo
+            profile= Profile.objects.create(
+                user=user,
+                
+                nickname=request.POST.get('Nickname', ''),
+                #national_id=request.POST.get('NationalId', ''),
+                phone1=request.POST.get('phone1', ''),
+                phone2=request.POST.get('phone2', ''),
+                image = request.FILES.get('image'),
+                #email=request.POST.get('email', ''),
+                employment_status=request.POST.get('employment-status', ''),
+                employer_name=request.POST.get('employer-name', ''),
+                job_title=request.POST.get('job-title', ''),
+                location_of_work=request.POST.get('location_of_work', ''),
+                supervisors_name=request.POST.get('supervisors_name', ''),
+                supervisors_contact=request.POST.get('supervisors_contact', ''),
+                monthly_income=safe_decimal(request.POST.get('monthly_income', '')),
+                monthly_expense=safe_decimal(request.POST.get('monthly_expense', '')),
+                business_name=request.POST.get('business-name', ''),
+                industry_type=request.POST.get('industry-type', ''),
+                business_location=request.POST.get('business_location', ''),
+                daily_income=safe_decimal(request.POST.get('daily_income', '')),
+                daily_expense=safe_decimal(request.POST.get('daily_expense', '')),
+                net_income=safe_decimal(request.POST.get('net_income', '')),
+                #loan_amount=safe_decimal(request.POST.get('loan_amount', '')),
+                #amount_in_words=request.POST.get('amount_in_words', ''),
+                #date_of_loan=request.POST.get('date_of_loan', ''),
+                ##repay_principal=safe_decimal(request.POST.get('repay_principal', '')),
+                #interest=request.POST.get('interest', ''),
+               #total=safe_decimal(request.POST.get('total', '')),
+                #repay_date=request.POST.get('repay_date', '')
+            )
+            print("profile saved successfully")
+            
+            loan_info = LoanInfo.objects.create(
+                profile=profile,
+                loan_amount=safe_decimal(request.POST.get('loan_amount', '')),
+                amount_in_words=request.POST.get('amount_in_words', ''),
+                date_of_loan=request.POST.get('date_of_loan', ''),
+                repay_principal=safe_decimal(request.POST.get('repay_principal', '')),
+                interest=request.POST.get('interest', ''),
+                total=safe_decimal(request.POST.get('total', '')),
+                repay_date=request.POST.get('repay_date', '')
+                )
+            
+            print("loan items saved successfully")
+           
+            item_count = int(request.POST.get('item_count', 0))
+            for i in range(1, item_count + 1):
+                item_name = request.POST.get(f'item-name-{i}', '')
+                item_description = request.POST.get(f'item-description-{i}', '')
+                photo1 = request.FILES.get(f'item-photo-{i}-1')
+                photo2 = request.FILES.get(f'item-photo-{i}-2')
+                photo3 = request.FILES.get(f'item-photo-{i}-3')
+                photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                Client_Collateral.objects.create(
+                    loan_info=loan_info ,
+                    item_name=item_name,
+                    item_description=item_description,
+                    photo1=photo1,
+                    photo2=photo2,
+                    photo3=photo3,
+                    photo4=photo4,
+                )
+            
+            print("client collateral items saved successfully")
+           
+            
+            # Spouse Info
+            SpouseInfo.objects.create(
+                profile=profile,
+                marital_status=request.POST.get('marital-status', ''),
+                spouse_name=request.POST.get('spouse-name', ''),
+                work_place=request.POST.get('work_place', ''),
+                position=request.POST.get('position', ''),
+                contact=request.POST.get('contact', ''),
+                no_of_dependants=safe_int(request.POST.get('no_of_dependants', '')),                
+                parent_type=request.POST.get('parent-type', ''),  
+                father_full_name=request.POST.get('father-full-name', ''),
+                father_contact=request.POST.get('father-contact', ''),
+                mother_full_name=request.POST.get('mother-full-name', ''), 
+                mother_contact=request.POST.get('mother-contact', ''),
+                nextofkin=request.POST.get('nextofkin', ''),
+            )
+            print("spouse details saved successfully.")
+
+            # Residence Info
+            ResidenceInfo.objects.create(
+                profile=profile,
+                residence_type = request.POST.get('residence_type', ''),
+                residence_description = request.POST.get('residence_description', ''),
+                rural_residence=request.POST.get('rural_residence', '')
+            )
+            print("residency saved successfully.")
+
+            # CRB Info
+            CRBInfo.objects.create(
+                loan_info=loan_info,
+                image = request.FILES.get('image'),
+                agree_to_terms = request.POST.get('agree_to_terms') == 'on'  # Checkbox returns 'on' if checked, otherwise None
+            )
+            print("crb info saved successfully.")
+
+            messages.success(request, "Client information submitted successfully.")
+            return redirect('guarantor')  # Replace with your success URL
+
+        except Exception as e:
+            # Log the error and handle as necessary
+            print(f"An error occurred: {e}")
+            return HttpResponseServerError("An error occurred while processing the form.")
+    
+    return render(request, 'kopa/client.html')  # Replace with your template
+'''
+
+@login_required
+def client_profile(request, client_id):
+    # Retrieve the client using the provided client_id
+    profile = get_object_or_404(Profile, id=client_id)
+    
+    # Fetch the associated guarantors
+    guarantors = profile.guarantors.all()
+    residence_info = profile.residence_info
+
+    # Pass the client and guarantors data to the template context
+    context = {
+        'profile': profile,
+        'guarantors': guarantors,
+        'residence_info': residence_info,
+    }
+    
+    return render(request, 'kopa/profile.html', context)
+    
+    

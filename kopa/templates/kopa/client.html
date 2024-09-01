@@ -50,6 +50,7 @@
             <!-- Form -->
             <form method="post" action="{% url 'client' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
               {% csrf_token %}
+              {% if not existing_profile %}
 
               
 
@@ -432,6 +433,390 @@
                   <input type="submit" value="Submit" class="btn" />
                 </div>
               </div>
+              {% else %}
+
+
+              <!-- Progress bar -->
+              <div class="progressbar">
+                <div class="progress" id="progress"></div>
+
+                <div
+                  class="progress-step progress-step-active"
+                  data-title="Loan info"
+                ></div>
+                <div class="progress-step" data-title="Family info"></div>
+                <div class="progress-step" data-title="Residence info"></div>
+                <div class="progress-step" data-title="Collateral info"></div>
+              </div>
+
+              <!-- Steps -->
+              <div class="form-step form-step-active">
+                <h5 class="text-center"><b>LOAN INFO<b></h5>
+                <!--<div class="input-group">
+                  <label for="Fullname">Full name</label>
+                  <input type="text" name="Fullname" id="Fullname" />
+                </div>-->
+                <!--<div class="input-group">
+                  <label for="Nickname">Nick name</label>
+                  <input type="text" name="Nickname" id="Nickname" />
+                </div>-->
+                <!--<div class="input-group">
+                  <label for="NationalId">ID number</label>
+                  <input
+                    type="number"
+                    name="NationalId"
+                    NationalId="NationalId"
+                  />
+                </div>-->
+               <!--<div class="input-group">
+                  <label for="phone1">Phone 1</label>
+                  <input type="text" name="phone1" id="phone1" />
+                </div>
+                <div class="input-group">
+                  <label for="phone2">Phone 2 <i>(optional)</i></label>
+                  <input type="text" name="phone2" id="phone2" />
+                </div>
+                <div class="input-group">
+  <label for="image">Upload photo of your face</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
+                <div class="input-group">
+                  <label for="email">Email</label>
+                  <input type="text" name="email" id="email" />
+                </div>
+
+                <div class="">
+                  <label for="employment-status"
+                    >Employment Status:
+                    <i>(Kindly select from button below)</i></label
+                  >
+                  <select
+                    id="employment-status"
+                    name="employment-status"
+                    onchange="showFields()"
+                  >
+                    <option value="">Select...</option>
+                    <option value="employed">Employed</option>
+                    <option value="unemployed">Unemployed</option>
+                    <option value="self-employed">Self-employed</option>
+                  </select>
+
+                  <div id="employed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="employer-name">Employers Name:</label>
+                    <input
+                      type="text"
+                      id="employer-name"
+                      name="employer-name"
+                    />
+
+                    <label for="job-title">Job Title:</label>
+                    <input type="text" id="job-title" name="job-title" />
+                    <label for="location_of_work">Location of work:</label>
+                    <input
+                      type="text"
+                      id="location_of_work"
+                      name="location_of_work"
+                    />
+                    <label for="supervisors_name">Supervisors name:</label>
+                    <input
+                      type="text"
+                      id="supervisors_name"
+                      name="supervisors_name"
+                    />
+                    <label for="supervisors_contact"
+                      >Supervisors contact:</label
+                    >
+                    <input
+                      type="text"
+                      id="supervisors_contact"
+                      name="supervisors_contact"
+                    />
+                    <label for="monthly_income">Net monthly income:</label>
+                    <input
+                      type="text"
+                      id="monthly_income"
+                      name="monthly_income"
+                    />
+                    <label for="monthly_expense">Monthly expense:</label>
+                    <input
+                      type="text"
+                      id="monthly_expense"
+                      name="monthly_expense"
+                    />
+                  </div>
+
+                  <div id="unemployed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="unemployment-reason"
+                      >Reason for Unemployment:</label
+                    >
+                    <input
+                      type="text"
+                      id="unemployment-reason"
+                      name="unemployment-reason"
+                    />
+                  </div>
+
+                  <div id="self-employed-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="business-name">Business Name:</label>
+                    <input
+                      type="text"
+                      id="business-name"
+                      name="business-name"
+                    />
+
+                    <label for="industry-type">Industry Type:</label>
+                    <input
+                      type="text"
+                      id="industry-type"
+                      name="industry-type"
+                    />
+                    <label for="business_location">Business location:</label>
+                    <input
+                      type="text"
+                      id="business_location"
+                      name="business_location"
+                    />
+                    <label for="daily_income">Daily income:</label>
+                    <input type="text" id="daily_income" name="daily_income" />
+                    <label for="daily_expense">Daily expense:</label>
+                    <input
+                      type="text"
+                      id="daily_expense"
+                      name="daily_expense"
+                    />
+                    <label for="net_income">Net income:</label>
+                    <input type="text" id="net_income" name="net_income" />
+                  </div>
+                </div>-->
+
+                <div class="input-group">
+                  <label for="loan_amount">Loan amount</label>
+                  <input type="text" name="loan_amount" id="loan_amount" />
+                </div>
+                <div class="input-group">
+                  <label for="amount_in_words">Loan amount in words</label>
+                  <input
+                    type="text"
+                    name="amount_in_words"
+                    id="amount_in_words"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="date_of_loan">Date loan taken</label>
+                  <input type="date" name="date_of_loan" id="date_of_loan" />
+                </div>
+                <div class="input-group">
+                  <label for="repay_principal">Repay principal</label>
+                  <input
+                    type="text"
+                    name="repay_principal"
+                    id="repay_principal"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="interest">Interest</label>
+                  <input type="text" name="interest" id="interest" />
+                </div>
+                <div class="input-group">
+                  <label for="total">Total</label>
+                  <input type="text" name="total" id="total" />
+                </div>
+                <div class="input-group">
+                  <label for="repay_date">Repay on or before</label>
+                  <input type="date" name="repay_date" id="repay_date" />
+                </div>
+
+                <br /><br /><br />
+                <div class="">
+                  <a href="#" class="btn btn-next width-50 ml-auto">Next</a>
+                </div>
+              </div>
+              <div class="form-step">
+                <!--<h5 class="text-center"><b>FAMILY INFORMATION<b></h5>
+                <div class="">
+                  <label for="marital-status"
+                    >Marital Status:
+                    <i>(Kindly select from button below)</i></label
+                  >
+                  <select
+                    id="marital-status"
+                    name="marital-status"
+                    onchange="showMaritalFields()"
+                  >
+                    <option value="">Select...</option>
+                    <option value="married">Married</option>
+                    <option value="single">Single</option>
+                  </select>
+
+                  <div id="married-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="spouse-name">Spouse's Name:</label>
+                    <input type="text" id="spouse-name" name="spouse-name" />
+
+                    <label for="work_place">Work place:</label>
+                    <input type="text" id="work_place" name="work_place" />
+                    <label for="position">Position:</label>
+                    <input type="text" id="position" name="position" />
+                    <label for="contact">Contact:</label>
+                    <input type="text" id="contact" name="contact" />
+                    <label for="no_of_dependants">Number of dependants:</label>
+                    <input
+                      type="text"
+                      id="no_of_dependants"
+                      name="no_of_dependants"
+                    />
+                  </div>
+
+                  <div id="single-fields" class="conditional-section">
+                    <br /><br />
+                    <label for="no_of_dependants">Number of dependants:</label>
+                    <input
+                      type="text"
+                      id="no_of_dependants"
+                      name="no_of_dependants"
+                    />
+                  </div>
+                  <br><br>
+
+                  
+  <div class="">
+    <label for="parent-type">Parent Details: 
+      <i>(Kindly select from the options below)</i>
+    </label>
+    <select id="parent-type" name="parent-type" onchange="showParentFields()">
+      <option value="">Select...</option>
+      <option value="father">Father Details</option>
+      <option value="mother">Mother Details</option>
+    </select>
+
+    <div id="father-fields" class="conditional-section" style="display:none;">
+      <br /><br />
+      <label for="father-full-name">Father's Full Name:</label>
+      <input type="text" id="father-full-name" name="father-full-name" />
+      
+      <label for="father-contact">Father's Contact:</label>
+      <input type="text" id="father-contact" name="father-contact" />
+    </div>
+
+    <div id="mother-fields" class="conditional-section" style="display:none;">
+      <br /><br />
+      <label for="mother-full-name">Mother's Full Name:</label>
+      <input type="text" id="mother-full-name" name="mother-full-name" />
+      
+      <label for="mother-contact">Mother's Contact:</label>
+      <input type="text" id="mother-contact" name="mother-contact" />
+    </div>
+  </div>
+
+  <div class="input-group">
+                  <label for="nextofkin">Next of Kin</label>
+                  <input type="text" name="nextofkin" id="nextofkin" />
+                </div>
+
+                </div>-->
+                <p class="center" >Already filled</p>
+                
+                <br /><br /><br />
+                <div>
+                  <div class="btns-group">
+                    <a href="#" class="btn btn-prev">Previous</a>
+                    <a href="#" class="btn btn-next">Next</a>
+                  </div>
+                </div>
+              </div>
+              <div class="form-step">
+                <h5 class="text-center"><b>RESIDENCE INFORMATION</b></h5>
+    <!--<div class="input-group">
+        <label for="residence_type">Select your residence type:</label>
+        <select id="residence_type" name="residence_type" onchange="showDescriptionField()">
+            <option value="">--Select--</option>
+            <option value="permanent">Permanent Residence</option>
+            <option value="temporary">Temporary Residence</option>
+        </select>
+    </div>
+    <div id="residence_description" class="input-group">
+        <label for="residence_description_input">Description:</label>
+        <input
+            type="text"
+            id="residence_description_input"
+            name="residence_description"
+            placeholder="e.g. Ngoingwa, Thika"
+        />
+    </div>
+    <div class="input-group">
+                  <label for="rural_residence"
+                    >Applicants rural residence:<i>(if any)</i></label
+                  >
+                  <input
+                    type="text"
+                    id="rural_residence"
+                    name="rural_residence"
+                    placeholder="eg. Ngoingwa, Thika"
+                  />
+                </div> -->
+                <p class="center" >Already filled</p>
+    <script>
+        function showDescriptionField() {
+            var residenceType = document.getElementById('residence_type').value;
+            var descriptionField = document.getElementById('residence_description');
+
+            if (residenceType) {
+                descriptionField.style.display = 'block';
+            } else {
+                descriptionField.style.display = 'none';
+            }
+        }
+    </script>
+
+                <div class="btns-group">
+                  <a href="#" class="btn btn-prev">Previous</a>
+                  <a href="#" class="btn btn-next">Next</a>
+                </div>
+              </div>
+              <div class="form-step">
+                 <h5 class="text-center"><b>COLLATERAL INFORMATION</b></h5>
+
+              <label>Upload upto three collateral items</label>
+              <input type="hidden" id="item_count" name="item_count" value="0">
+    <div id="collateral-items"></div>
+    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
+    
+    <div class="input-group">
+  <label for="image">Upload photo of your signature</label>
+  <input type="file" name="image" id="image" accept="image/*" />
+</div>
+
+
+    
+
+    <br><br>
+                
+                <!--<h5 class="text-center"><b>CRB INFORMATION<b></h5>-->
+                <p class="border-box">
+                  <b>I <i>{{request.user.first_name}} </i>of ID number <i>{{request.user.id_number}} </i> Authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.</b>
+                  
+                </p>
+
+                 <div class="input-group">
+        <label for="agree_to_terms">
+            <input type="checkbox" id="agree_to_terms" name="agree_to_terms" required>
+            I agree to the Terms and Conditions
+        </label>
+    </div>
+               
+                <div class="btns-group">
+                  <a href="#" class="btn btn-prev">Previous</a>
+                  <br /><br />
+                  
+    
+                  <input type="submit" value="Submit" class="btn" />
+                </div>
+              </div>
+
+              {% endif %}
 
               {% csrf_token %}
             </form>
