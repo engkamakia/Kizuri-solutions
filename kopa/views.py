@@ -163,13 +163,7 @@ def sign_in(request):
 
 
 
-@login_required
-def client_info_view(request):
-    # Fetch all ClientInfo records
-    profile = Profile.objects.all()
-    
-    # Render the template with the client data
-    return render(request, 'kopa/dashboard.html', {'profile': profile})
+
     
     
    
@@ -503,7 +497,7 @@ def safe_int(value, default=0):
 
 
 #from django.contrib.auth import get_user_model
-
+@login_required
 def client_submission_form(request):
     user = CustomUser.objects.get(id=request.user.id)
 
@@ -785,4 +779,21 @@ def client_profile(request, client_id):
     
     return render(request, 'kopa/profile.html', context)
     
-    
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def client_info_view(request):
+    # Fetch all LoanInfo records along with related data
+    loan_infos = LoanInfo.objects.select_related(
+        'profile',  # Fetch Profile linked with LoanInfo
+        'profile__spouse_info',  # Fetch SpouseInfo linked with Profile
+        'profile__residence_info',  # Fetch ResidenceInfo linked with Profile
+        'guarantor'  # Fetch Guarantor linked with LoanInfo
+    ).prefetch_related(
+        'client_collaterals',  # Fetch Client_Collateral linked with LoanInfo
+        'crb_info'  # Fetch CRBInfo linked with LoanInfo
+    )
+
+    # Render the template with all the related data
+    return render(request, 'kopa/dashboard.html', {'loan_infos': loan_infos})

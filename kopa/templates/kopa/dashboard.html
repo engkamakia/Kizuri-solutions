@@ -256,25 +256,20 @@
                         <tr>
                             <th>Name</th>
                             <th>ID no</th>
-                            <th>Loan Amount</th>
-                            <th>Repay Principle</th>
-                            <th>Interest</th>
-                            <th>Total</th>
+                            <th>Loan Amount</th>                            
                             <th>Phone1</th>
                             <th>Email</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for client in clients %}
+                        {% for loan_info in loan_infos %}
                         <tr>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.client_infos.first_name }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.national_id }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.loan_amount }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.repay_principal }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.interest }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.total }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.phone1 }}</a></td>
-                            <td><a href="{% url 'client_profile' client.id %}" class="row-link">{{ client.email }}</a></td>
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.first_name }}</a></td>
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.id_number }}</a></td>
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.loan_amount }}</a></td>
+                           
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.phone1 }}</a></td>
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.email }}</a></td>
                         </tr>
                         {% empty %}
                         <tr>
