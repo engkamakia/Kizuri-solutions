@@ -1,4 +1,4 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% load static %}<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!--- Include the above in your HEAD tag -->
@@ -61,15 +61,54 @@ body{
 <div class="container">
     <div class="main-body">
     
-          <!-- Breadcrumb -->
-          <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb">
-              
-              <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
-              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-            </ol>
-          </nav>
-          <!-- /Breadcrumb -->
+            <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparent">
+                <div class="main-header  header-sticky">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <!-- Logo -->
+                            <div class="col-xl-2 col-lg-2 col-md-1">
+                                <div class="logo">
+              <a href="{% url 'home' %}"
+                ><img src="{% static 'assets/img/logo/logo8.png'%}" alt=""
+              /></a>
+            </div>
+                            </div>
+                            <div class="col-xl-10 col-lg-10 col-md-10">
+                            <div class="menu-main d-flex align-items-center justify-content-end">
+                                <!-- Main-menu -->
+                                <div class="main-menu f-right d-none d-lg-block">
+                                    <nav> 
+                                        <ul id="navigation">  
+                                            <a href="{% url 'home' %}"
+                        ><i class="fa fa-home" aria-hidden="true"></i> Home</a
+                      >
+                    </li>
+                    <li>
+                      <a href="{% url 'logout' %}"
+                        ><i class="fas fa-sign-out-alt"></i> Logout</a
+                      >
+                    </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <!--<div class="header-right-btn f-right d-none d-lg-block">
+                                    <a href="#" class="btn header-btn">+880.762.009.00 </a>
+                                </div>-->
+                            </div>
+                            </div>   
+                            <!-- Mobile Menu -->
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <!-- Header End -->
+    </header>
+        
     
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
@@ -78,7 +117,7 @@ body{
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>{{ profile.user.full_name  }}</h4>
+                      <h4>{{ profile.user.first_name }} {{ profile.user.last_name }}</h4>
                       <!--<p class="text-secondary mb-1">Full Stack Developer</p>
                       <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                       <button class="btn btn-primary">Follow</button>
@@ -116,12 +155,14 @@ body{
               <!-- First Additional Card -->
 <div class="card mb-3">
   <div class="card-body">
+    <h5><b>CLIENT PERSONAL INFORMATION<b></h5>
+  <br>  
     <div class="row">
       <div class="col-sm-3">
         <h6 class="mb-0">Full name</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ profile.user.full_name  }}
+        {{ profile.user.first_name }} {{ profile.user.last_name }}
       </div>
     </div>
     <hr>
@@ -130,7 +171,7 @@ body{
         <h6 class="mb-0">ID number</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ profile.user.national_id  }}
+        {{ profile.user.id_number  }}
       </div>
     </div>
     <hr>
@@ -148,7 +189,7 @@ body{
         <h6 class="mb-0">Phone 1</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ profile.user.phone1  }}
+        {{ profile.phone1 }}
       </div>
     </div>
     <hr>
@@ -157,7 +198,7 @@ body{
         <h6 class="mb-0">Phone 2</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        {{ profile.user.phone2  }}
+        {{ profile.phone2 }}
       </div>
     </div>
     <hr>
@@ -166,7 +207,7 @@ body{
         <h6 class="mb-0">Permanent address</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-       {{ residence_info.permanent_residence }}
+       {{ residence_info.residence_description }}
       </div>
     </div>
     <hr>
@@ -175,7 +216,7 @@ body{
         <h6 class="mb-0">Temporary address</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-       {{ residence_info.temporary_residence }}
+       {{ residence_info.residence_description }}
       </div>
     </div>
     <hr>
@@ -229,6 +270,8 @@ body{
 <!-- Second Additional Card -->
 <div class="card mb-3">
   <div class="card-body">
+    <h5><b>FAMILY INFORMATION<b></h5>
+  <br>  
     <div class="row">
       <div class="col-sm-3">
         <h6 class="mb-0">Marital status</h6>
@@ -287,55 +330,67 @@ body{
   </div>
 </div>
 
-<!-- Third Additional Card 
-<div class="card mb-3">
-  <div class="card-body">
+<!-- Third Additional Card -->
+ 
+<div class="card mb-3">  
+  <div class="card-body">  
+ <h5><b>LOAN INFORMATION<b></h5>
+  <br>    
     <div class="row">
       <div class="col-sm-3">
-        <h6 class="mb-0">Department</h6>
+        <h6 class="mb-0">Loan amount</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        Product Development
+        
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-sm-3">
-        <h6 class="mb-0">Team Lead</h6>
+        <h6 class="mb-0">Date loan taken</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        John Doe
+        
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-sm-3">
-        <h6 class="mb-0">Project</h6>
+        <h6 class="mb-0">Repay principal</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        Next-Gen App Development
+        
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-sm-3">
-        <h6 class="mb-0">Role</h6>
+        <h6 class="mb-0">Interest</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        Frontend Developer
+        
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-sm-3">
-        <h6 class="mb-0">Work Location</h6>
+        <h6 class="mb-0">Total</h6>
       </div>
       <div class="col-sm-9 text-secondary">
-        Remote
+        
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <h6 class="mb-0">Repay on or before</h6>
+      </div>
+      <div class="col-sm-9 text-secondary">
+        
       </div>
     </div>
   </div>
-</div>-->
+</div>
 
               
 

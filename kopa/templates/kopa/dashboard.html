@@ -84,6 +84,10 @@
           font-size: 3.5rem;
         }
       }
+      .row-padding {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
     </style>
 
     
@@ -229,13 +233,18 @@
         </div>
         <!-- Header End -->
     </header>
+        
+    
 
   <div class="apply-area pt-150 pb-150">
     <div class="">
+      
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h3>All Clients Dashboard</h3>
-        <div class="btn-toolbar mb-2 mb-md-0">
+        
+    <h3>All Clients Dashboard</h3>
+        <!--<div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
@@ -244,8 +253,17 @@
             <span data-feather="calendar"></span>
             This week
           </button>
-        </div>
+        </div>-->
       </div>
+
+      <!-- Search bar starts here -->
+      <form method="GET" action="" class="input-group mb-3" style="width: 75%;">
+        <input type="text" name="q" class="form-control" placeholder="Search for clients..." aria-label="Search" aria-describedby="search-button" value="{{ request.GET.q }}">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit" id="search-button">Search</button>
+        </div>
+      </form>
+      <!-- Search bar ends here -->
 
      
 
@@ -254,22 +272,23 @@
         <table class="table table-striped table-sm">
           <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
                             <th>ID no</th>
                             <th>Loan Amount</th>                            
                             <th>Phone1</th>
-                            <th>Email</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         {% for loan_info in loan_infos %}
                         <tr>
                             <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.first_name }}</a></td>
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.last_name }}</a></td>
                             <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.id_number }}</a></td>
-                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.loan_amount }}</a></td>
-                           
+                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.loan_amount }}</a></td>                           
                             <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.phone1 }}</a></td>
-                            <td><a href="{% url 'client_profile' loan_info.profile.id %}" class="row-link">{{ loan_info.profile.user.email }}</a></td>
+                            
                         </tr>
                         {% empty %}
                         <tr>

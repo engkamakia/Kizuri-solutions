@@ -34,7 +34,7 @@
         {% endif %}
                             <h1 data-animation="fadeInLeft" data-delay=".5s">Small Business Loans For Daily Expenses.</h1>
                             <!-- Hero Btn -->
-                            <a href="apply.html" class="btn hero-btn" data-animation="fadeInLeft" data-delay=".8s">Apply for Loan</a>
+                            <a href="{% url 'client' %}" class="btn hero-btn" data-animation="fadeInLeft" data-delay=".8s">Apply for Loan</a>
                         </div>
                         <div class="hero__img">
                             <img src="assets/img/hero/hero_img.jpg" alt="">
@@ -62,7 +62,7 @@
                     <!-- single -->
                     <div class="single-caption">
                         <div class="single-img">
-                            <img src="assets/img/hero/hero_footer.png" alt="">
+                            <img src="{% static 'assets/img/hero/hero_footer.jpg' %}" alt="">
                         </div>
                     </div>
                     <!-- single -->
@@ -71,8 +71,8 @@
                             <span class="flaticon-clock"></span>
                         </div>
                         <div class="caption">
-                            <p>Quick & Easy Loan</p>
-                            <p>Approvals</p>
+                            <p>Fast and Convenient</p>
+                            <p></p>
                         </div>
                     </div>
                     <!-- single -->
@@ -81,8 +81,8 @@
                             <span class="flaticon-like"></span>
                         </div>
                         <div class="caption">
-                            <p>Quick & Easy Loan</p>
-                            <p>Approvals</p>
+                            <p>Simple Application Process</p>
+                            <p></p>
                         </div>
                     </div>
                     <!-- single -->
@@ -91,8 +91,8 @@
                             <span class="flaticon-money"></span>
                         </div>
                         <div class="caption">
-                            <p>Quick & Easy Loan</p>
-                            <p>Approvals</p>
+                            <p>Flexible Repayment Options</p>
+                            <p></p>
                         </div>
                     </div>
                   
@@ -106,91 +106,127 @@
         <div class="about-low-area section-padding2">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-12 col-md-12">
                         <div class="about-caption mb-50">
                             <!-- Section Tittle -->
                             <div class="section-tittle mb-35">
                                 <span>About Our Company</span>
                                 <h2>Building a Brighter financial Future & Good Support.</h2>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, oeiusmod tempor incididunt ut labore et dolore magna aliqua. Ut eniminixm, quis nostrud exercitation ullamco laboris nisi ut aliquip exeaoauat. Duis aute irure dolor in reprehe.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, oeiusmod tempor incididunt ut labore et dolore magna aliq.</p>
-                            <a href="{% url 'client' %}" class="btn">Apply for Loan</a>
+                            <p>Kizuri Solutions, formed in 2022, is more than just a lending platform; it's a financial partner dedicated to your success. We understand that navigating the world of loans can be daunting, which is why we're here to simplify the process for you. At Kizuri Solutions, we pride ourselves on offering transparent and straightforward lending solutions designed to meet your individual needs.</p>
+                            <p>Our mission is to provide access to fast, reliable, and affordable loans, empowering you to achieve your financial goals with confidence. With a commitment to integrity and customer satisfaction, we prioritize transparency and fairness in every interaction. Trust Kizuri Solutions to be your trusted partner on your journey towards financial stability and success.</p>
+                            <a type="button" class="btn hero-btn " data-animation="fadeInLeft" data-delay=".8s" href="{% url 'client' %}">Apply for Loan</a></h3>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12">
-                        <!-- about-img -->
-                        <div class="about-img ">
-                            <div class="about-font-img d-none d-lg-block">
-                                <img src="assets/img/gallery/about2.png" alt="">
-                            </div>
-                            <div class="about-back-img ">
-                                <img src="assets/img/gallery/about1.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
         <!-- About Law End-->
-        <!-- Services Area Start -->
-        <div class="services-area pt-150 pb-150" data-background="assets/img/gallery/section_bg02.jpg">
+       <!-- Services Area Start -->
+        <div class="services-area pt-150 pb-150" style="background-image: url('{% static 'assets/img/gallery/section_bg02.jpg' %}')">
+        
+           <!--<div class="services-area section-padding30">-->
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-6 col-md-10">
                         <!-- Section Tittle -->
                         <div class="section-tittle text-center mb-80">
-                            <span>Services that we are providing</span>
-                            <h2>High Performance Services For All Industries.</h2>
+                            <span>Loan services that we are providing</span>
+                            <h2>We Offer Loans In The Following Categories.</h2>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="single-cat text-center mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-work"></span>
-                            </div>
-                            <div class="cat-cap">
-                                <h5><a href="services.html">Business Loan</a></h5>
-                                <p>Consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="single-cat text-center mb-50">
+                <div class="row"> <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
                             <div class="cat-icon">
                                 <span class="flaticon-loan"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services.html">Commercial Loans</a></h5>
-                                <p>Consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore</p>
+                                <h5><a href="services.html">Emergency Loans</a></h5>
+                                <p>Quick loans designed to cover urgent expenses, such as medical bills or car repairs. They typically have fast approval processes and may be available to borrowers with less-than-perfect credit.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="single-cat text-center mb-50">
+                        <div class="single-cat single-cat2 text-center mb-50">
                             <div class="cat-icon">
-                                <span class="flaticon-loan-1"></span>
+                                <span class="flaticon-loan"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services.html">Construction Loans</a></h5>
-                                <p>Consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore</p>
+                                <h5><a href="services.html">Personal Loans: </a></h5>
+                                <p>general-purpose loans that can be used for various personal expenses, such as medical bills, home improvements, debt consolidation, or unexpected expenses.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="single-cat text-center mb-50">
+                        <div class="single-cat single-cat2 text-center mb-50">
                             <div class="cat-icon">
-                                <span class="flaticon-like"></span>
+                                <span class="flaticon-loan"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services.html">Business Loan</a></h5>
-                                <p>Consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore</p>
+                                <h5><a href="services.html">Business Loans</a></h5>
+                                <p>Designed for entrepreneurs and small businesses, these loans can be used for starting a new business, expanding operations, purchasing equipment, or managing cash flow.</p>
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-loan"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Student Loans</a></h5>
+                                <p>Intended to cover education-related expenses, such as tuition fees, books, and living expenses. They may offer flexible repayment options and competitive interest rates.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-loan"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Auto Loans</a></h5>
+                                <p>This type of loan is specifically designed for purchasing vehicles, whether new or used. These loans often come with fixed terms and interest rates based on the vehicle's value.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-loan"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Payday Loans</a></h5>
+                                <p>This type of loan is a short-term loans intended to cover unexpected expenses until the borrower's next payday. These loans typically come with high-interest rates and fees.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-loan"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5>Equipment Financing<a href="services.html"></a></h5>
+                                <p>This type of loan helps businesses acquire the equipment and machinery they need to operate efficiently. It may involve leasing or purchasing equipment outright with the loan funds</p>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-cat single-cat2 text-center mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-loan"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Working Capital Loans</a></h5>
+                                <p>Designed to cover day-to-day operational expenses, such as payroll, inventory purchases, or rent. These loans help businesses maintain liquidity and manage cash flow fluctuations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                  </div>
             </div>
         </div>
@@ -200,10 +236,10 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-xl-6 col-lg-6">
-                        <div class="support-location-img mb-50">
-                            <img src="assets/img/gallery/single2.jpg" alt="">
+                        <div class="support-location-img mb-50">                            
+                            <img src="{% static 'assets/img/gallery/single5.jpg' %}" alt="">
                             <div class="support-img-cap">
-                                <span>Since 2022</span>
+                                <span>Since 2021</span>
                             </div>
                         </div>
                     </div>
@@ -215,21 +251,33 @@
                                 <h2>We Promise Sustainable  Future For You.</h2>
                             </div>
                             <div class="support-caption">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                <p>At Kizuri Solutions, we pride ourselves on being a trusted and reliable partner in your financial journey. Our commitment to providing tailored loan solutions, coupled with competitive interest rates and a quick, hassle-free application process, sets us apart in the industry. We understand the unique needs of our clients and offer flexible repayment options to suit your circumstances. With a strong emphasis on transparency and customer satisfaction, Kizuri Solutions ensures that you receive the support you need with no hidden costs. Choose Kizuri Solutions for a secure, personalized lending experience you can trust.</p>
                                 <div class="select-suport-items">
-                                    <label class="single-items">Aorem ipsum dgolor sitnfd amet dfgbn fbsdg
+                                    <label class="single-items"> Apply for a loan anytime, anywhere, and receive it right in your MPESA account within 15 minutes of your application’s approval.
                                         <input type="checkbox" checked="checked active">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <label class="single-items">Consectetur adipisicing bfnelit, sedb dvbnfo
+                                    <!--<label class="single-items">We require only one identity document to process your mobile loan.
+                                        <input type="checkbox" checked="checked active">
+                                        <span class="checkmark"></span>
+                                    </label>-->
+                                    <label class="single-items">We offer the most competitive interest rates in the market to ensure that you can easily repay your loan.
                                         <input type="checkbox" checked="checked active">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <label class="single-items">Eiusmod tempor incididunt vmgldupout labore
+                                    <label class="single-items">We offer flexible repayment options to suit your financial situation.
                                         <input type="checkbox" checked="checked active">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <label class="single-items">Admkde mibvnim veniam, quivds cnostrud.
+                                    <label class="single-items">Your data is safe with us. We do not share your details with any third parties without your permission.
+                                        <input type="checkbox" checked="checked active">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="single-items">Unlike other loan apps, we promise a high approval rate and reliable customer service.
+                                        <input type="checkbox" checked="checked active">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="single-items">Got questions? The dedicated customer service team at Kizuri Solutions is always ready to assist you, any time of the day or night.
                                         <input type="checkbox" checked="checked active">
                                         <span class="checkmark"></span>
                                     </label>
@@ -240,6 +288,7 @@
                 </div>
             </div>
         </div>
+        <!-- Support Company End-->
         
     </main>
 
