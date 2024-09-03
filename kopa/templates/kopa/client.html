@@ -28,6 +28,22 @@
         #residence_description {
             display: none;
         }
+
+        .alert.error {
+    background-color: #e74c3c;
+    color: white; /* Ensure the text is readable */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.alert.success {
+    background-color: #2ecc71;
+    color: white; /* Ensure the text is readable */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+        
   </style>
 
   <!-- Apply Area Start -->
@@ -35,6 +51,16 @@
     <div class="container">
       <div class="row">
         <div class="col-xl-12">
+           <!-- Display messages -->
+        {% if messages %}
+    <div>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} custom-alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
           <div class="hero-cap text-center pt-50">
             <h2>Client Commitment Form</h2>
           </div>
@@ -77,8 +103,8 @@
                   <input type="text" name="Fullname" id="Fullname" />
                 </div>-->
                 <div class="input-group">
-                  <label for="Nickname">Nick name</label>
-                  <input type="text" name="Nickname" id="Nickname" />
+                  <label for="Nickname">Nick name *</label>
+                  <input type="text" name="Nickname" id="Nickname" required/>
                 </div>
                 <!--<div class="input-group">
                   <label for="NationalId">ID number</label>
@@ -89,16 +115,16 @@
                   />
                 </div>-->
                 <div class="input-group">
-                  <label for="phone1">Phone 1</label>
-                  <input type="text" name="phone1" id="phone1" />
+                  <label for="phone1">Phone 1 *</label>
+                  <input type="text" name="phone1" id="phone1" required/>
                 </div>
                 <div class="input-group">
                   <label for="phone2">Phone 2 <i>(optional)</i></label>
                   <input type="text" name="phone2" id="phone2" />
                 </div>
                 <div class="input-group">
-  <label for="image">Upload photo of your face</label>
-  <input type="file" name="image" id="image" accept="image/*" />
+  <label for="image">Upload photo of your face *</label>
+  <input type="file" name="image" id="image" accept="image/*" required/>
 </div>
                 <!--<div class="input-group">
                   <label for="email">Email</label>
@@ -123,118 +149,118 @@
 
                   <div id="employed-fields" class="conditional-section">
                     <br /><br />
-                    <label for="employer-name">Employers Name:</label>
+                    <label for="employer-name">Employers Name:*</label>
                     <input
                       type="text"
                       id="employer-name"
                       name="employer-name"
-                    />
+                    required/>
 
                     <label for="job-title">Job Title:</label>
                     <input type="text" id="job-title" name="job-title" />
-                    <label for="location_of_work">Location of work:</label>
+                    <label for="location_of_work">Location of work:*</label>
                     <input
                       type="text"
                       id="location_of_work"
                       name="location_of_work"
-                    />
-                    <label for="supervisors_name">Supervisors name:</label>
+                    required/>
+                    <label for="supervisors_name">Supervisors name:*</label>
                     <input
                       type="text"
                       id="supervisors_name"
                       name="supervisors_name"
-                    />
+                    required/>
                     <label for="supervisors_contact"
-                      >Supervisors contact:</label
+                      >Supervisors contact:*</label
                     >
                     <input
                       type="text"
                       id="supervisors_contact"
                       name="supervisors_contact"
-                    />
-                    <label for="monthly_income">Net monthly income:</label>
+                    required/>
+                    <label for="monthly_income">Net monthly income:*</label>
                     <input
                       type="text"
                       id="monthly_income"
                       name="monthly_income"
-                    />
-                    <label for="monthly_expense">Monthly expense:</label>
+                    required/>
+                    <label for="monthly_expense">Monthly expense:*</label>
                     <input
                       type="text"
                       id="monthly_expense"
                       name="monthly_expense"
-                    />
+                    required/>
                   </div>
 
                   <div id="unemployed-fields" class="conditional-section">
                     <br /><br />
                     <label for="unemployment-reason"
-                      >Reason for Unemployment:</label
+                      >Reason for Unemployment:*</label
                     >
                     <input
                       type="text"
                       id="unemployment-reason"
                       name="unemployment-reason"
-                    />
+                    required/>
                   </div>
 
                   <div id="self-employed-fields" class="conditional-section">
                     <br /><br />
-                    <label for="business-name">Business Name:</label>
+                    <label for="business-name">Business Name:*</label>
                     <input
                       type="text"
                       id="business-name"
                       name="business-name"
-                    />
+                    required/>
 
-                    <label for="industry-type">Industry Type:</label>
+                    <label for="industry-type">Industry Type:*</label>
                     <input
                       type="text"
                       id="industry-type"
                       name="industry-type"
-                    />
-                    <label for="business_location">Business location:</label>
+                    required/>
+                    <label for="business_location">Business location:*</label>
                     <input
                       type="text"
                       id="business_location"
                       name="business_location"
-                    />
-                    <label for="daily_income">Daily income:</label>
-                    <input type="text" id="daily_income" name="daily_income" />
-                    <label for="daily_expense">Daily expense:</label>
+                    required/>
+                    <label for="daily_income">Daily income:*</label>
+                    <input type="text" id="daily_income" name="daily_income"required />
+                    <label for="daily_expense">Daily expense:*</label>
                     <input
                       type="text"
                       id="daily_expense"
                       name="daily_expense"
-                    />
-                    <label for="net_income">Net income:</label>
-                    <input type="text" id="net_income" name="net_income" />
+                    required/>
+                    <label for="net_income">Net income:*</label>
+                    <input type="text" id="net_income" name="net_income" required/>
                   </div>
                 </div>
 
                 <div class="input-group">
-                  <label for="loan_amount">Loan amount</label>
-                  <input type="text" name="loan_amount" id="loan_amount" />
+                  <label for="loan_amount">Loan amount*</label>
+                  <input type="text" name="loan_amount" id="loan_amount" required/>
                 </div>
                 <div class="input-group">
-                  <label for="amount_in_words">Loan amount in words</label>
+                  <label for="amount_in_words">Loan amount in words*</label>
                   <input
                     type="text"
                     name="amount_in_words"
                     id="amount_in_words"
-                  />
+                  required/>
                 </div>
                 <div class="input-group">
-                  <label for="date_of_loan">Date loan taken</label>
-                  <input type="date" name="date_of_loan" id="date_of_loan" />
+                  <label for="date_of_loan">Date loan taken*</label>
+                  <input type="date" name="date_of_loan" id="date_of_loan" required/>
                 </div>
                 <div class="input-group">
-                  <label for="repay_principal">Repay principal</label>
+                  <label for="repay_principal">Repay principal*</label>
                   <input
                     type="text"
                     name="repay_principal"
                     id="repay_principal"
-                  />
+                  required/>
                 </div>
                 <div class="input-group">
                   <label for="interest">Interest</label>
@@ -433,6 +459,9 @@
                   <input type="submit" value="Submit" class="btn" />
                 </div>
               </div>
+
+
+
               {% else %}
 
 
@@ -451,182 +480,43 @@
 
               <!-- Steps -->
               <div class="form-step form-step-active">
-                <h5 class="text-center"><b>LOAN INFO<b></h5>
-                <!--<div class="input-group">
-                  <label for="Fullname">Full name</label>
-                  <input type="text" name="Fullname" id="Fullname" />
-                </div>-->
-                <!--<div class="input-group">
-                  <label for="Nickname">Nick name</label>
-                  <input type="text" name="Nickname" id="Nickname" />
-                </div>-->
-                <!--<div class="input-group">
-                  <label for="NationalId">ID number</label>
-                  <input
-                    type="number"
-                    name="NationalId"
-                    NationalId="NationalId"
-                  />
-                </div>-->
-               <!--<div class="input-group">
-                  <label for="phone1">Phone 1</label>
-                  <input type="text" name="phone1" id="phone1" />
+                <h5 class="text-center"><b>LOAN INFO <b></h5>
+                
+                <div class="input-group">
+                  <label for="loan_amount">Loan amount<i>*(Required)</i></label>
+                  <input type="text" name="loan_amount" id="loan_amount" required/>
                 </div>
                 <div class="input-group">
-                  <label for="phone2">Phone 2 <i>(optional)</i></label>
-                  <input type="text" name="phone2" id="phone2" />
-                </div>
-                <div class="input-group">
-  <label for="image">Upload photo of your face</label>
-  <input type="file" name="image" id="image" accept="image/*" />
-</div>
-                <div class="input-group">
-                  <label for="email">Email</label>
-                  <input type="text" name="email" id="email" />
-                </div>
-
-                <div class="">
-                  <label for="employment-status"
-                    >Employment Status:
-                    <i>(Kindly select from button below)</i></label
-                  >
-                  <select
-                    id="employment-status"
-                    name="employment-status"
-                    onchange="showFields()"
-                  >
-                    <option value="">Select...</option>
-                    <option value="employed">Employed</option>
-                    <option value="unemployed">Unemployed</option>
-                    <option value="self-employed">Self-employed</option>
-                  </select>
-
-                  <div id="employed-fields" class="conditional-section">
-                    <br /><br />
-                    <label for="employer-name">Employers Name:</label>
-                    <input
-                      type="text"
-                      id="employer-name"
-                      name="employer-name"
-                    />
-
-                    <label for="job-title">Job Title:</label>
-                    <input type="text" id="job-title" name="job-title" />
-                    <label for="location_of_work">Location of work:</label>
-                    <input
-                      type="text"
-                      id="location_of_work"
-                      name="location_of_work"
-                    />
-                    <label for="supervisors_name">Supervisors name:</label>
-                    <input
-                      type="text"
-                      id="supervisors_name"
-                      name="supervisors_name"
-                    />
-                    <label for="supervisors_contact"
-                      >Supervisors contact:</label
-                    >
-                    <input
-                      type="text"
-                      id="supervisors_contact"
-                      name="supervisors_contact"
-                    />
-                    <label for="monthly_income">Net monthly income:</label>
-                    <input
-                      type="text"
-                      id="monthly_income"
-                      name="monthly_income"
-                    />
-                    <label for="monthly_expense">Monthly expense:</label>
-                    <input
-                      type="text"
-                      id="monthly_expense"
-                      name="monthly_expense"
-                    />
-                  </div>
-
-                  <div id="unemployed-fields" class="conditional-section">
-                    <br /><br />
-                    <label for="unemployment-reason"
-                      >Reason for Unemployment:</label
-                    >
-                    <input
-                      type="text"
-                      id="unemployment-reason"
-                      name="unemployment-reason"
-                    />
-                  </div>
-
-                  <div id="self-employed-fields" class="conditional-section">
-                    <br /><br />
-                    <label for="business-name">Business Name:</label>
-                    <input
-                      type="text"
-                      id="business-name"
-                      name="business-name"
-                    />
-
-                    <label for="industry-type">Industry Type:</label>
-                    <input
-                      type="text"
-                      id="industry-type"
-                      name="industry-type"
-                    />
-                    <label for="business_location">Business location:</label>
-                    <input
-                      type="text"
-                      id="business_location"
-                      name="business_location"
-                    />
-                    <label for="daily_income">Daily income:</label>
-                    <input type="text" id="daily_income" name="daily_income" />
-                    <label for="daily_expense">Daily expense:</label>
-                    <input
-                      type="text"
-                      id="daily_expense"
-                      name="daily_expense"
-                    />
-                    <label for="net_income">Net income:</label>
-                    <input type="text" id="net_income" name="net_income" />
-                  </div>
-                </div>-->
-
-                <div class="input-group">
-                  <label for="loan_amount">Loan amount</label>
-                  <input type="text" name="loan_amount" id="loan_amount" />
-                </div>
-                <div class="input-group">
-                  <label for="amount_in_words">Loan amount in words</label>
+                  <label for="amount_in_words">Loan amount in words<i>*(Required)</i></label>
                   <input
                     type="text"
                     name="amount_in_words"
                     id="amount_in_words"
-                  />
+                  required/>
                 </div>
                 <div class="input-group">
-                  <label for="date_of_loan">Date loan taken</label>
-                  <input type="date" name="date_of_loan" id="date_of_loan" />
+                  <label for="date_of_loan">Date loan taken<i>*(Required)</i></label>
+                  <input type="date" name="date_of_loan" id="date_of_loan" required/>
                 </div>
                 <div class="input-group">
-                  <label for="repay_principal">Repay principal</label>
+                  <label for="repay_principal">Repay principal<i>*(Required)</i></label>
                   <input
                     type="text"
                     name="repay_principal"
                     id="repay_principal"
-                  />
+                  required/>
                 </div>
                 <div class="input-group">
-                  <label for="interest">Interest</label>
-                  <input type="text" name="interest" id="interest" />
+                  <label for="interest">Interest<i>*(Required)</i></label>
+                  <input type="text" name="interest" id="interest" required/>
                 </div>
                 <div class="input-group">
-                  <label for="total">Total</label>
-                  <input type="text" name="total" id="total" />
+                  <label for="total">Total<i>*(Required)</i></label>
+                  <input type="text" name="total" id="total" required/>
                 </div>
                 <div class="input-group">
-                  <label for="repay_date">Repay on or before</label>
-                  <input type="date" name="repay_date" id="repay_date" />
+                  <label for="repay_date">Repay on or before<i>*(Required)</i></label>
+                  <input type="date" name="repay_date" id="repay_date" required/>
                 </div>
 
                 <br /><br /><br />
@@ -635,88 +525,7 @@
                 </div>
               </div>
               <div class="form-step">
-                <!--<h5 class="text-center"><b>FAMILY INFORMATION<b></h5>
-                <div class="">
-                  <label for="marital-status"
-                    >Marital Status:
-                    <i>(Kindly select from button below)</i></label
-                  >
-                  <select
-                    id="marital-status"
-                    name="marital-status"
-                    onchange="showMaritalFields()"
-                  >
-                    <option value="">Select...</option>
-                    <option value="married">Married</option>
-                    <option value="single">Single</option>
-                  </select>
-
-                  <div id="married-fields" class="conditional-section">
-                    <br /><br />
-                    <label for="spouse-name">Spouse's Name:</label>
-                    <input type="text" id="spouse-name" name="spouse-name" />
-
-                    <label for="work_place">Work place:</label>
-                    <input type="text" id="work_place" name="work_place" />
-                    <label for="position">Position:</label>
-                    <input type="text" id="position" name="position" />
-                    <label for="contact">Contact:</label>
-                    <input type="text" id="contact" name="contact" />
-                    <label for="no_of_dependants">Number of dependants:</label>
-                    <input
-                      type="text"
-                      id="no_of_dependants"
-                      name="no_of_dependants"
-                    />
-                  </div>
-
-                  <div id="single-fields" class="conditional-section">
-                    <br /><br />
-                    <label for="no_of_dependants">Number of dependants:</label>
-                    <input
-                      type="text"
-                      id="no_of_dependants"
-                      name="no_of_dependants"
-                    />
-                  </div>
-                  <br><br>
-
-                  
-  <div class="">
-    <label for="parent-type">Parent Details: 
-      <i>(Kindly select from the options below)</i>
-    </label>
-    <select id="parent-type" name="parent-type" onchange="showParentFields()">
-      <option value="">Select...</option>
-      <option value="father">Father Details</option>
-      <option value="mother">Mother Details</option>
-    </select>
-
-    <div id="father-fields" class="conditional-section" style="display:none;">
-      <br /><br />
-      <label for="father-full-name">Father's Full Name:</label>
-      <input type="text" id="father-full-name" name="father-full-name" />
-      
-      <label for="father-contact">Father's Contact:</label>
-      <input type="text" id="father-contact" name="father-contact" />
-    </div>
-
-    <div id="mother-fields" class="conditional-section" style="display:none;">
-      <br /><br />
-      <label for="mother-full-name">Mother's Full Name:</label>
-      <input type="text" id="mother-full-name" name="mother-full-name" />
-      
-      <label for="mother-contact">Mother's Contact:</label>
-      <input type="text" id="mother-contact" name="mother-contact" />
-    </div>
-  </div>
-
-  <div class="input-group">
-                  <label for="nextofkin">Next of Kin</label>
-                  <input type="text" name="nextofkin" id="nextofkin" />
-                </div>
-
-                </div>-->
+                
                 <p class="center" >Already filled</p>
                 
                 <br /><br /><br />
@@ -729,34 +538,7 @@
               </div>
               <div class="form-step">
                 <h5 class="text-center"><b>RESIDENCE INFORMATION</b></h5>
-    <!--<div class="input-group">
-        <label for="residence_type">Select your residence type:</label>
-        <select id="residence_type" name="residence_type" onchange="showDescriptionField()">
-            <option value="">--Select--</option>
-            <option value="permanent">Permanent Residence</option>
-            <option value="temporary">Temporary Residence</option>
-        </select>
-    </div>
-    <div id="residence_description" class="input-group">
-        <label for="residence_description_input">Description:</label>
-        <input
-            type="text"
-            id="residence_description_input"
-            name="residence_description"
-            placeholder="e.g. Ngoingwa, Thika"
-        />
-    </div>
-    <div class="input-group">
-                  <label for="rural_residence"
-                    >Applicants rural residence:<i>(if any)</i></label
-                  >
-                  <input
-                    type="text"
-                    id="rural_residence"
-                    name="rural_residence"
-                    placeholder="eg. Ngoingwa, Thika"
-                  />
-                </div> -->
+    
                 <p class="center" >Already filled</p>
     <script>
         function showDescriptionField() {
@@ -779,14 +561,14 @@
               <div class="form-step">
                  <h5 class="text-center"><b>COLLATERAL INFORMATION</b></h5>
 
-              <label>Upload upto three collateral items</label>
+              <label>Upload upto three collateral items *(Required)</label>
               <input type="hidden" id="item_count" name="item_count" value="0">
     <div id="collateral-items"></div>
     <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
     
     <div class="input-group">
-  <label for="image">Upload photo of your signature</label>
-  <input type="file" name="image" id="image" accept="image/*" />
+  <label for="image">Upload photo of your signature<i> *(Required)</i></label>
+  <input type="file" name="image" id="image" accept="image/*" required/>
 </div>
 
 
@@ -802,8 +584,9 @@
 
                  <div class="input-group">
         <label for="agree_to_terms">
+           I agree to the Terms and Conditions *(Required)
             <input type="checkbox" id="agree_to_terms" name="agree_to_terms" required>
-            I agree to the Terms and Conditions
+           
         </label>
     </div>
                
@@ -821,7 +604,8 @@
               {% csrf_token %}
             </form>
 
-            <script>
+            
+<script>
               function showFields() {
                 const status =
                   document.getElementById("employment-status").value;
@@ -953,6 +737,15 @@
       alert('You can only add up to 3 collateral items.');
     }
   }
+</script>
+
+<script>
+              document.getElementById('yourFormId').addEventListener('submit', function(event) {
+    if (!this.checkValidity()) {
+        event.preventDefault(); // Prevent the form from submitting
+        alert('Please fill in all required fields.');
+    }
+});
 </script>
           </div>
         </div>

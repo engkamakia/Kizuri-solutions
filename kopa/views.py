@@ -18,6 +18,9 @@ from .utils import get_access_token, query_stk_status
 from .decorators import login_required 
 
 
+# Set up logging
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 def contact(request):
     if request.method == "POST":
@@ -64,20 +67,20 @@ def success(request):
 
 def sign_up(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        id_number = request.POST.get('id_number')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Check if passwords match
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match')
-            return render(request, 'kopa/registration.html')
-
-        # Create user
         try:
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            id_number = request.POST.get('id_number')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+
+            # Check if passwords match
+            if password != confirm_password:
+                messages.error(request, 'Passwords do not match')
+                return render(request, 'kopa/registration.html')
+
+            # Create user
             user = CustomUser.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -86,13 +89,15 @@ def sign_up(request):
                 password=password
             )
             messages.success(request, 'Account created successfully!')
-            
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('login')
         except IntegrityError:
             messages.error(request, 'A user with this ID number or email already exists.')
             return redirect('registration')
-
+        except Exception as e:
+            logger.error(f"Error in sign_up view: {e}")
+            messages.error(request, 'An error occurred during sign-up. Please try again.')
+            return redirect('registration')
     return render(request, 'kopa/registration.html')
 
 
@@ -101,18 +106,20 @@ def sign_up(request):
 
 def sign_in(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        id_number = request.POST.get('id_number')
-        
-        
-        user = authenticate(request, email=email, password=password, id_number=id_number)
-        if user is not None:
-            login(request, user)
-            return redirect('home')  # Replace 'home' with your desired redirect URL
-        else:
-            messages.error(request, 'Invalid email, Id or password')
-    
+        try:
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            id_number = request.POST.get('id_number')
+            
+            user = authenticate(request, email=email, password=password, id_number=id_number)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Invalid email, ID number, or password')
+        except Exception as e:
+            logger.error(f"Error in sign_in view: {e}")
+            messages.error(request, 'An error occurred during sign-in. Please try again.')
     return render(request, 'kopa/login.html')
 
 
@@ -343,9 +350,8 @@ def client_submission_form(request):
         return render(request, 'kopa/client.html', context)
 
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return HttpResponseServerError("An error occurred while processing the form.")
-
+        messages.error(request, f"An error occurred while processing the form, fill all required form fields")
+        return redirect('client')
 
 
 
