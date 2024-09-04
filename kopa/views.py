@@ -16,6 +16,8 @@ import logging
 from .models import CustomUser, LoanInfo, Guarantor, Collateral, Profile, SpouseInfo, ResidenceInfo, CRBInfo, Client_Collateral
 from .utils import get_access_token, query_stk_status
 from .decorators import login_required 
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # Set up logging
@@ -24,24 +26,25 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def contact(request):
     if request.method == "POST":
-        name = request.POST["name"]
-        email = request.POST["email"]
-        subject = request.POST["subject"]
-        message = request.POST["message"] 
-        
-        # send email
-        """
-        send_mail(
-            f"message from {email}, SUBJECT:" + subject, #subject
-            message, #message
-            email, #from email
-            [settings.EMAIL_HOST_USER], #to email
-        )
-        """
-        return render(request,'kopa/contacts.html',{"name":name})  
-    
+        try:
+            name = request.POST["name"]
+            email = request.POST["email"]
+            subject = request.POST["subject"]
+            message = request.POST["message"]
+
+            # send email
+            send_mail(
+                f"Message from {email}, SUBJECT: {subject}",  # subject
+                message,  # message
+                email,  # from email
+                [settings.EMAIL_HOST_USER],  # to email
+            )
+            return render(request, 'kopa/contact.html', {"name": name})
+        except Exception as e:
+            # Handle the exception (you may want to log it or show an error message)
+            return HttpResponse(f"An error occurred: {e}")
     else:
-        return render(request,'kopa/contacts.html',{})
+        return render(request, 'kopa/contact.html', {})
     
     
 def index(request):   
@@ -114,6 +117,7 @@ def sign_in(request):
             user = authenticate(request, email=email, password=password, id_number=id_number)
             if user is not None:
                 login(request, user)
+                messages.success(request, 'logged in successfully, you can now fill the loan application form')
                 return redirect('home')
             else:
                 messages.error(request, 'Invalid email, ID number, or password')

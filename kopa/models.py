@@ -13,6 +13,7 @@ from django.conf import settings
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+import uuid
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, first_name, last_name, id_number, email, password=None):
@@ -272,7 +273,8 @@ class Profile(models.Model):
     def __str__(self):
         return f" {self.user.first_name} {self.user.last_name} "
     
-class LoanInfo(models.Model): 
+class LoanInfo(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True) 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='loan_infos')   
     loan_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_in_words = models.CharField(max_length=255)

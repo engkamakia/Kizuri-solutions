@@ -168,21 +168,67 @@
     </style>
 </head>
 <body>
-<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-    <div class="card card0 border-0">
-        <div class="row d-flex">
-            <div class="col-lg-6">
-                <div class="card1 pb-5">
-                    <div class="row">
-                        <img  href="{% url 'home' %}" src="{% static 'assets/img/logo/kizuri.png' %}" class="logo">
+<!-- Header Start -->
+    <div class="header-area header-transparent">
+        <div class="main-header header-sticky">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-6">
+                        <div class="logo">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'assets/img/logo/logo8.png' %}" alt="Logo" class="img-fluid" />
+                            </a>
+                        </div>
                     </div>
-                    <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
-                        <!--<img src="https://i.imgur.com/uNGdWHi.png" class="image">-->
-                        <img src="https://img.freepik.com/free-vector/premium-cash-reward-bonus-work-done-best-employee-rewarding-promotion-order-efficiency-stimulation-boss-subordinate-cartoon-characters_335657-2984.jpg" class="image">
-
+                    <!-- Navbar Menu -->
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-6">
+                        <div class="menu-main d-flex align-items-center justify-content-end">
+                            <!-- Main-menu -->
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation" class="d-flex">
+                                        <li>
+                                            <a href="{% url 'home' %}">
+                                                <i class="fa fa-home" aria-hidden="true"></i> Home
+                                            </a>
+                                        </li>
+                                       <!--<li>
+                                            <a href="{% url 'logout' %}">
+                                                <i class="fas fa-sign-out-alt"></i> Logout
+                                            </a>
+                                        </li>-->
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12 d-lg-none">
+                        <div class="mobile_menu"></div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
+
+
+    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+      <div class="card card0 border-0">
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="card1 pb-5">
+              <br><br><br><br>
+              
+              <div
+                class="row px-3 justify-content-center mt-4 mb-5 border-line"
+              >
+                <img src="https://img.freepik.com/free-vector/premium-cash-reward-bonus-work-done-best-employee-rewarding-promotion-order-efficiency-stimulation-boss-subordinate-cartoon-characters_335657-2984.jpg" class="image" />
+              </div>
+            </div>
+          </div>
             <div class="col-lg-6">
                 <div class="card2 card border-0 px-4 py-5">
                     {% if messages %}

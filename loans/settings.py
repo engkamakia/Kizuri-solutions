@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-(@v5_!wq8s3o&m16ec+4cwff+)*l6v0pw3x7ynfz)37@i4=v@-'
-#SECRET_KEY = os.environ.get("SECRET_KEY")
-SECRET_KEY = 'django-insecure-(@v5_!wq8s3o&m16ec+4cwff+)*l6v0pw3x7ynfz)37@i4=v@-'
+SECRET_KEY = os.environ.get("SECRET_KEY")
+#SECRET_KEY = 'django-insecure-(@v5_!wq8s3o&m16ec+4cwff+)*l6v0pw3x7ynfz)37@i4=v@-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.environ.get("DEBUG", "False").lower()== "true"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower()== "true"
+#DEBUG = True
 
 #ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split("")
 ALLOWED_HOSTS = ['https://kizuri-solutions-app.onrender.com','localhost', 'kizuri-solutions-app.onrender.com', '*']
@@ -97,7 +97,16 @@ DATABASES = {
     }
 }
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'YCorqdXGNrlZSOeMoOtqRIwqvXMihWEx',
+        'HOST': 'junction.proxy.rlwy.net',
+        'PORT': '32053',
+    }
+}
 #database_url = os.environ.get("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render")
 '''DATABASES = {
     'default': {
@@ -122,6 +131,7 @@ DATABASES = {
     }
 }
 '''
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
