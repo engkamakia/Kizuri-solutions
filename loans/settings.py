@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 #SECRET_KEY = 'django-insecure-(@v5_!wq8s3o&m16ec+4cwff+)*l6v0pw3x7ynfz)37@i4=v@-'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+#SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower()== "true"
 #DEBUG = True
 
@@ -97,16 +97,18 @@ DATABASES = {
     }
 }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'YCorqdXGNrlZSOeMoOtqRIwqvXMihWEx',
+        'PASSWORD': 'JVHUxvKUWbqOaUywrwZoBeXTfeeUwQbX',
         'HOST': 'junction.proxy.rlwy.net',
-        'PORT': '32053',
+        'PORT': '11183',  # Use the correct port from the URL
     }
 }
+#postgresql://postgres:JVHUxvKUWbqOaUywrwZoBeXTfeeUwQbX@junction.proxy.rlwy.net:11183/railway
 #database_url = os.environ.get("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render")
 '''DATABASES = {
     'default': {
@@ -155,6 +157,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Use database-backed sessions
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep the session alive even after closing the browser
+SESSION_COOKIE_AGE = 1209600  # Session will last for 2 weeks
+SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

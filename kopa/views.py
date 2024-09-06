@@ -25,27 +25,9 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def contact(request):
-    if request.method == "POST":
-        try:
-            name = request.POST["name"]
-            email = request.POST["email"]
-            subject = request.POST["subject"]
-            message = request.POST["message"]
-
-            # send email
-            send_mail(
-                f"Message from {email}, SUBJECT: {subject}",  # subject
-                message,  # message
-                email,  # from email
-                [settings.EMAIL_HOST_USER],  # to email
-            )
-            return render(request, 'kopa/contact.html', {"name": name})
-        except Exception as e:
-            # Handle the exception (you may want to log it or show an error message)
-            return HttpResponse(f"An error occurred: {e}")
-    else:
-        return render(request, 'kopa/contact.html', {})
     
+        return render(request, 'kopa/contact.html', {})
+   
     
 def index(request):   
     return render(request,'kopa/index.html')
@@ -150,34 +132,37 @@ def guarantor_view(request, loan_id):
             # Parse the guarantee date
             guarantee_date_str = request.POST.get('guarantee_date', '')
             guarantee_date = parse_date(guarantee_date_str)
-            
-            # Get the Profiles associated with the logged-in user
-            #print(f"Loan Info ID: {loan_id}")
+            print(f"Parsed guarantee date: {guarantee_date}")
+
+            # Get the LoanInfo associated with the loan_id
+            print(f"Fetching LoanInfo with ID: {loan_id}")
             loan_info = get_object_or_404(LoanInfo, id=loan_id)
             context['loan_info'] = loan_info
-            #loan_info = LoanInfo.objects.filter(user=request.user).latest('date_of_loan')
-            
+            print(f"LoanInfo found: {loan_info}")
+
             # Save Guarantor information
             guarantor = Guarantor.objects.create(
-                loan_info= loan_info,
+                loan_info=loan_info,
                 full_name=request.POST.get('full_name', ''),
                 nick_name=request.POST.get('nick_name', ''),
                 id_number=request.POST.get('id_number', ''),
                 phone1=request.POST.get('phone1', ''),
                 phone2=request.POST.get('phone2', ''),
                 email=request.POST.get('email', ''),
-                face_image=request.FILES.get('image'),
+                face_image=request.FILES.get('face_image'),
                 guarantee_name=request.POST.get('guarantee_name', ''),
                 loan_amount=request.POST.get('loan_amount', ''),
                 loan_amount_words=request.POST.get('loan_amount_words', ''),
                 guarantee_date=guarantee_date,
                 residence=request.POST.get('residence', ''),
-                id_photo=request.FILES.get('image'),
+                signature_image=request.FILES.get('signature_image'),
             )
             print("Guarantor saved successfully.")
-            
+            print(f"Guarantor details: {guarantor}")
+
             # Handle collateral items
             item_count = int(request.POST.get('item_count', 0))
+            print(f"Number of collateral items: {item_count}")
             for i in range(1, item_count + 1):
                 item_name = request.POST.get(f'item-name-{i}', '')
                 item_description = request.POST.get(f'item-description-{i}', '')
@@ -185,6 +170,14 @@ def guarantor_view(request, loan_id):
                 photo2 = request.FILES.get(f'item-photo-{i}-2')
                 photo3 = request.FILES.get(f'item-photo-{i}-3')
                 photo4 = request.FILES.get(f'item-photo-{i}-4')
+
+                print(f"Saving collateral item {i}:")
+                print(f"Item name: {item_name}")
+                print(f"Item description: {item_description}")
+                print(f"Photo1: {photo1}")
+                print(f"Photo2: {photo2}")
+                print(f"Photo3: {photo3}")
+                print(f"Photo4: {photo4}")
 
                 Collateral.objects.create(
                     guarantor=guarantor,
@@ -198,13 +191,14 @@ def guarantor_view(request, loan_id):
                 print(f"Collateral item {i} saved successfully.")
                 
             print("All collateral items saved successfully.")
-            messages.success(request, "guarantor information submitted successfully.")
+            messages.success(request, "Guarantor information submitted successfully.")
             return redirect('home')
 
         except Exception as e:
             print(f"An error occurred: {e}")
-            messages.error("An error occurred while saving Guarantor information.")
-            
+            messages.error(request, "An error occurred while saving Guarantor information.")
+    
+    # For non-POST requests
     loan_info = get_object_or_404(LoanInfo, id=loan_id)
     context['loan_info'] = loan_info
     return render(request, 'kopa/guarantor.html', context)
@@ -259,6 +253,7 @@ def client_submission_form(request):
                 )
             
             loan_info = LoanInfo.objects.create(
+                #id=id,
                 profile=profile,
                 loan_amount=safe_decimal(request.POST.get('loan_amount', '')),
                 amount_in_words=request.POST.get('amount_in_words', ''),
@@ -354,7 +349,7 @@ def client_submission_form(request):
         return render(request, 'kopa/client.html', context)
 
     except Exception as e:
-        messages.error(request, f"An error occurred while processing the form, fill all required form fields")
+        messages.error(request, f"An error occurred while processing the form, fill all required form fields",e)
         return redirect('client')
 
 

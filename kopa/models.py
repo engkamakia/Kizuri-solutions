@@ -372,7 +372,7 @@ class Guarantor(models.Model):
     loan_amount_words = models.CharField(max_length=255)
     guarantee_date = models.DateField(null=True, blank=True)
     residence = models.CharField(max_length=255)
-    id_photo = CloudinaryField('guarantor_sinature')
+    signature_image = CloudinaryField('guarantor_signature')
     
     
     class Meta:        
