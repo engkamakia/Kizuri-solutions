@@ -349,7 +349,8 @@ def client_submission_form(request):
         return render(request, 'kopa/client.html', context)
 
     except Exception as e:
-        messages.error(request, f"An error occurred while processing the form, fill all required form fields",e)
+        #messages.error(request, f"An error occurred while processing the form, fill all required form fields",e)
+        messages.error(request, f"An error occurred: {str(e)}")
         return redirect('client')
 
 
