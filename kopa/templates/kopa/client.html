@@ -124,7 +124,7 @@
                 </div>
                 <div class="input-group">
   <label for="image">Upload photo of your face *(Required)</label>
-  <input type="file" name="image" id="image" accept="image/*" required/>
+  <input type="file" name="face_image" id="face_image" accept="image/*" required/>
 </div>
                 <!--<div class="input-group">
                   <label for="email">Email</label>
@@ -285,7 +285,7 @@
                 <div class="">
                   <label for="marital-status"
                     >Marital Status:
-                    <i>(Kindly select from button below)</i></label
+                    <i>(Kindly select from button below)</i> *(Required)</label
                   >
                   <select
                     id="marital-status"
@@ -330,7 +330,7 @@
                   
   <div class="">
     <label for="parent-type">Parent Details: 
-      <i>(Kindly select from the options below)</i>
+      <i>(Kindly select from the options below) *(Required)</i>
     </label>
     <select id="parent-type" name="parent-type" onchange="showParentFields()">
       <option value="">Select...</option>
@@ -358,7 +358,7 @@
   </div>
 
   <div class="input-group">
-                  <label for="nextofkin">Next of Kin</label>
+                  <label for="nextofkin">Next of Kin *(Required)</label>
                   <input type="text" name="nextofkin" id="nextofkin" />
                 </div>
 
@@ -383,18 +383,20 @@
         </select>
     </div>
     <div id="residence_description" class="input-group">
-        <label for="residence_description_input">Description:</label>
-        <input
-            type="text"
-            id="residence_description_input"
-            name="residence_description"
-            placeholder="e.g. Ngoingwa, Thika"
-            maxlength="255"
-        />
+        <label for="residence_description_input">Short description of location:</label>
+        <textarea
+        id="residence_description_input"
+        name="residence_description"
+        
+        maxlength="255"
+        rows="4"   
+        cols="50"   
+        required    
+    ></textarea>
     </div>
     <div class="input-group">
                   <label for="rural_residence"
-                    >Applicants rural residence:<i>(if any)</i></label
+                    >Applicants rural residence:<i> *(Required)</i></label
                   >
                   <input
                     type="text"
@@ -424,14 +426,14 @@
               <div class="form-step">
                  <h5 class="text-center"><b>COLLATERAL INFORMATION</b></h5>
 
-              <label>Upload upto three collateral items</label>
+              <label> *(Required)</label>
               <input type="hidden" id="item_count" name="item_count" value="0">
     <div id="collateral-items"></div>
-    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
+    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Items</b></button>
     
     <div class="input-group">
-  <label for="image">Upload photo of your signature</label>
-  <input type="file" name="image" id="image" accept="image/*" />
+  <label for="image">Upload photo of your signature *(Required)</label>
+  <input type="file" name="signature_image" id="signature_image" accept="image/*" />
 </div>
 
 
@@ -447,8 +449,9 @@
 
                  <div class="input-group">
         <label for="agree_to_terms">
+          I agree to the Terms and Conditions *(Required)
             <input type="checkbox" id="agree_to_terms" name="agree_to_terms" required>
-            I agree to the Terms and Conditions
+            
         </label>
     </div>
                
@@ -457,7 +460,7 @@
                   <br /><br />
                   
     
-                  <input type="submit" value="Submit" class="btn" />
+                  <input type="submit" value="Submit" class="btn" id="submit_button"/>
                 </div>
               </div>
 
@@ -596,7 +599,7 @@
                   <br /><br />
                   
     
-                  <input type="submit" value="Submit" class="btn" />
+                  <input type="submit" value="Submit" class="btn" id="submit_button" />
                 </div>
               </div>
 
@@ -604,7 +607,27 @@
 
               {% csrf_token %}
             </form>
+  <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkbox = document.getElementById('agree_to_terms');
+            const submitButton = document.getElementById('submit_button');
 
+            // Function to toggle button visibility
+            function toggleSubmitButton() {
+                if (checkbox.checked) {
+                    submitButton.style.display = 'inline'; // Show the button
+                } else {
+                    submitButton.style.display = 'none'; // Hide the button
+                }
+            }
+
+            // Check the initial state
+            toggleSubmitButton();
+
+            // Add event listener for checkbox changes
+            checkbox.addEventListener('change', toggleSubmitButton);
+        });
+    </script>
             
 <script>
               function showFields() {

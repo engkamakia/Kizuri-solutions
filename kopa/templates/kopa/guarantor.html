@@ -56,19 +56,19 @@
 
               <h1 class="text-center">GUARANTOR INFO</h1>
               <div class="input-group">
-                <label for="full_name">Full Name</label>
+                <label for="full_name">Full Name *(Required)</label>
                 <input type="text" name="full_name" id="full_name" required />
               </div>
               <div class="input-group">
-                <label for="nick_name">Nick Name</label>
+                <label for="nick_name">Nick Name *(Required)</label>
                 <input type="text" name="nick_name" id="nick_name" required />
               </div>
               <div class="input-group">
-                <label for="id_number">ID Number</label>
+                <label for="id_number">ID Number *(Required)</label>
                 <input type="number" name="id_number" id="id_number" required />
               </div>
               <div class="input-group">
-                <label for="phone1">Phone 1</label>
+                <label for="phone1">Phone 1 *(Required)</label>
                 <input type="text" name="phone1" id="phone1" required />
               </div>
               <div class="input-group">
@@ -76,40 +76,41 @@
                 <input type="text" name="phone2" id="phone2" />
               </div>
               <div class="input-group">
-                <label for="email">Email</label>
+                <label for="email">Email (optional)</label>
                 <input type="email" name="email" id="email" required />
               </div>
               <div class="input-group">
-  <label for="image">Upload photo of your face</label>
+  <label for="image">Upload photo of your face *(Required)</label>
   <input type="file" name="face_image" id="face_image" accept="image/*" />
 </div>
               <div class="input-group">
-                <label for="guarantee_name">Wish to Guarantee (Full Name)</label>
+                <label for="guarantee_name">Wish to Guarantee (Full Name) *(Required)</label>
                 <input type="text" name="guarantee_name" id="guarantee_name" required />
               </div>
               <div class="input-group">
-                <label for="loan_amount">Loan Amount</label>
+                <label for="loan_amount">Loan Amount *(Required)</label>
                 <input type="number" name="loan_amount" id="loan_amount" required />
               </div>
               <div class="input-group">
-                <label for="loan_amount_words">Loan Amount in Words</label>
+                <label for="loan_amount_words">Loan Amount in Words *(Required)</label>
                 <input type="text" name="loan_amount_words" id="loan_amount_words" required />
               </div>
               <div class="input-group">
-  <label for="guarantee_date">Date You Guarantee / {{ shift.start_date|date:'l' }}</label>
+  <label for="guarantee_date">Date You Guarantee *(Required)</label>
   <input type="date" name="guarantee_date" id="guarantee_date" required value="{{ shift.start_date|date:'Y-m-d' }}"/>
 </div>
               <div class="input-group">
-                <label for="residence">Guarantor's Residence</label>
+                <label for="residence">Guarantor's Residence *(Required)</label>
                 <input type="text" name="residence" id="residence" required />
               </div>
 
-              <h2>Collateral Information</h2>
+              
               <input type="hidden" id="item_count" name="item_count" value="0">
     <div id="collateral-items"></div>
-    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Item</b></button>
+     <label> *(Required)</label>
+    <button type="button" onclick="addCollateralItem()"><b>Add Collateral Items</b></button>
     <div class="input-group">
-  <label for="image">Upload photo of your signature</label>
+  <label for="image">Upload photo of your signature *(Required)</label>
   <input type="file" name="signature_image" id="signature_image" accept="image/*" />
 </div>
 

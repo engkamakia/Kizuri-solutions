@@ -24,8 +24,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 #SECRET_KEY = 'django-insecure-(@v5_!wq8s3o&m16ec+4cwff+)*l6v0pw3x7ynfz)37@i4=v@-'
 
 #SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.environ.get("DEBUG", "False").lower()== "true"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower()== "true"
+#DEBUG = True
 
 #ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split("")
 ALLOWED_HOSTS = ['https://kizuri-solutions-app.onrender.com','localhost', 'kizuri-solutions-app.onrender.com', '*']
@@ -108,6 +108,7 @@ DATABASES = {
         'PORT': '11183',  # Use the correct port from the URL
     }
 }
+
 #postgresql://postgres:JVHUxvKUWbqOaUywrwZoBeXTfeeUwQbX@junction.proxy.rlwy.net:11183/railway
 #database_url = os.environ.get("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render")
 '''DATABASES = {

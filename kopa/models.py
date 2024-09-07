@@ -247,7 +247,7 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=255, blank=True, null=True)   
     phone1 = models.CharField(max_length=15)
     phone2 = models.CharField(max_length=15, blank=True, null=True)
-    image = CloudinaryField('client_image')
+    face_image = CloudinaryField('client_image')
    
     employment_status = models.CharField(
         max_length=20,
@@ -283,12 +283,22 @@ class LoanInfo(models.Model):
     interest = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     repay_date = models.DateField()
+    is_paid = models.BooleanField(default=False) 
     
     class Meta:        
         verbose_name_plural = "Loan information"              
     
     def __str__(self):
         return f" {self.profile}"
+    
+     # Method to check if the LoanInfo object has a guarantor and delete if it doesn't
+    def check_and_delete_if_no_guarantor(self):
+        # Check if there is no related guarantor
+        if not hasattr(self, 'guarantor'):
+            # If no guarantor exists, delete the LoanInfo object
+            self.delete()
+            return True  # Return True if the LoanInfo was deleted
+        return False  # Return False if the LoanInfo has a guarantor and wasn't deleted
     
 class SpouseInfo(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='spouse_info')
@@ -346,7 +356,7 @@ class ResidenceInfo(models.Model):
 
 class CRBInfo(models.Model):
     loan_info = models.OneToOneField(LoanInfo, on_delete=models.CASCADE, related_name='crb_info')
-    image = CloudinaryField('signature_pic')
+    signature_image = CloudinaryField('signature_pic')
     agree_to_terms = models.BooleanField(default=False, verbose_name="Agree to Terms and Conditions")
     authorization_text = models.TextField(default="I authorize Kizuri Solutions Limited to access my credit profile from credit reference bureau.")
     

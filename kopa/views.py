@@ -235,7 +235,7 @@ def client_submission_form(request):
                     nickname=request.POST.get('Nickname', ''),
                     phone1=request.POST.get('phone1', ''),
                     phone2=request.POST.get('phone2', ''),
-                    image=request.FILES.get('image'),
+                    face_image=request.FILES.get('face_image'),
                     employment_status=request.POST.get('employment-status', ''),
                     employer_name=request.POST.get('employer-name', ''),
                     job_title=request.POST.get('job-title', ''),
@@ -331,7 +331,7 @@ def client_submission_form(request):
 
             CRBInfo.objects.create(
                 loan_info=loan_info,
-                image=request.FILES.get('image'),
+                signature_image=request.FILES.get('signature_image'),
                 agree_to_terms=request.POST.get('agree_to_terms') == 'on'
             )
 
@@ -356,25 +356,33 @@ def client_submission_form(request):
 
 
 @login_required
-def client_profile(request, client_id):
+def client_profile(request, client_id, loan_id):
     # Retrieve the profile using the provided client_id
     profile = get_object_or_404(Profile, id=client_id)
     
     # Fetch the associated data
-    loan_infos = profile.loan_infos.all()
+    loan_info = get_object_or_404(LoanInfo, id=loan_id, profile=profile)
+    if loan_info.check_and_delete_if_no_guarantor():
+        print("LoanInfo was deleted because it has no guarantor.")
+    else:
+        print("LoanInfo was not deleted because it has a guarantor.")
     spouse_info = profile.spouse_info
     residence_info = profile.residence_info
-    #guarantors = profile.guarantors.all()
-    client_collaterals = [loan.client_collaterals.all() for loan in loan_infos]
+    crb_info = loan_info.crb_info
+    guarantor = loan_info.guarantor
+    #client_collaterals = [loan.client_collaterals.all() for loan in loan_infos]
+    
+    
 
     # Pass the client and related data to the template context
     context = {
         'profile': profile,
-        'loan_infos': loan_infos,
+        'loan_info': loan_info,
         'spouse_info': spouse_info,
         'residence_info': residence_info,
-        #'guarantors': guarantors,
-        'client_collaterals': client_collaterals,
+        'crb_info': crb_info,
+        'guarantor': guarantor,
+        #'client_collaterals': client_collaterals,
     }
     
     return render(request, 'kopa/profile.html', context)
@@ -414,3 +422,25 @@ def client_info_view(request):
 
     # Render the template with all the related data
     return render(request, 'kopa/dashboard.html', context)
+
+
+def contact(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        email = request.POST["email"]
+        subject = request.POST["subject"]
+        message = request.POST["message"] 
+        
+        # send email
+        """
+        send_mail(
+            f"message from {email}, SUBJECT:" + subject, #subject
+            message, #message
+            email, #from email
+            [settings.EMAIL_HOST_USER], #to email
+        )
+        """
+        return render(request,'kopa/contacts.html',{"name":name})  
+    
+    else:
+        return render(request,'kopa/contacts.html',{})
