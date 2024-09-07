@@ -103,12 +103,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'JVHUxvKUWbqOaUywrwZoBeXTfeeUwQbX',
+        'PASSWORD': 'IUQgzByScSBQiViaFNEvniNNHoVNcqjD',
         'HOST': 'junction.proxy.rlwy.net',
-        'PORT': '11183',  # Use the correct port from the URL
+        'PORT': '30745',  # Use the correct port from the URL
     }
 }
 
+#postgresql://postgres:IUQgzByScSBQiViaFNEvniNNHoVNcqjD@junction.proxy.rlwy.net:30745/railway
 #postgresql://postgres:JVHUxvKUWbqOaUywrwZoBeXTfeeUwQbX@junction.proxy.rlwy.net:11183/railway
 #database_url = os.environ.get("postgresql://kizuri_django_render_user:nuZ9iLVjYvGZOTrp8gAGZQ5737uKfdoR@dpg-cr7bmla3esus738688lg-a/kizuri_django_render")
 '''DATABASES = {
