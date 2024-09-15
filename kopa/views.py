@@ -391,6 +391,8 @@ def client_profile(request, client_id, loan_id):
 
 @login_required
 def client_info_view(request):
+    query = request.GET.get('q')
+    
     # Fetch all LoanInfo records along with related data
     loan_infos = LoanInfo.objects.select_related(
         'profile',  # Fetch Profile linked with LoanInfo
@@ -401,25 +403,28 @@ def client_info_view(request):
         'client_collaterals',  # Fetch Client_Collateral linked with LoanInfo
         'crb_info'  # Fetch CRBInfo linked with LoanInfo
     )
-    query = request.GET.get('q')
-    if query:
-        profiles = CustomUser.objects.filter(
-            Q(first_name__icontains=query) |
-            Q(last_name__icontains=query) |
-            Q(id_number__icontains=query) |
-            Q(email__icontains=query) 
-           
-        )
-        logging.debug(f"Profiles found: {profiles}")  # Log the profiles found
-    else:
-        profiles = CustomUser.objects.all()
     
+    if query:
+        # First, filter the profiles by matching related user details
+        profiles = Profile.objects.filter(
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query) |
+            Q(user__id_number__icontains=query) |
+            Q(phone1__icontains=query)
+        )
+        
+        # Now, filter the LoanInfo records based on the matched profiles
+        loan_infos = loan_infos.filter(profile__in=profiles)
+    else:
+        profiles = Profile.objects.all()
+
     # Combine all necessary context data into a single dictionary
     context = {
         'loan_infos': loan_infos,
         'profiles': profiles,
     }
-
+    
+    
     # Render the template with all the related data
     return render(request, 'kopa/dashboard.html', context)
 
