@@ -1,0 +1,215 @@
+<!--The two views you provided seem to handle a lot of operations, which may cause slow performance for the following
+reasons:
+
+Multiple Database Writes: For each form submission, there are multiple objects being created or updated, which may
+involve multiple round-trips to the database.
+File Uploads: File uploads (face_image, signature_image, collateral images) may slow down the process, especially if the
+files are large.
+Parsing and Error Handling: The try-except block may be too broad, and exceptions can mask the exact source of the
+issue, which could delay error identification.
+Inefficient Querying: Repeated database queries (like get_object_or_404 and filter) could slow things down.
+Optimizations
+I'll refactor your views to:
+
+Reduce redundant database queries.
+Minimize the number of database operations.
+Handle exceptions more precisely.
+Here’s the optimized code:
+
+Refactored guarantor_view-->
+
+
+from django.db import transaction
+
+@login_required
+def guarantor_view(request, loan_id):
+context = {}
+if request.method == 'POST':
+try:
+# Parse the guarantee date
+guarantee_date_str = request.POST.get('guarantee_date', '')
+guarantee_date = parse_date(guarantee_date_str)
+
+# Fetch LoanInfo and raise 404 if not found
+loan_info = get_object_or_404(LoanInfo, id=loan_id)
+context['loan_info'] = loan_info
+
+with transaction.atomic():
+# Save Guarantor information
+guarantor = Guarantor.objects.create(
+loan_info=loan_info,
+full_name=request.POST.get('full_name', ''),
+nick_name=request.POST.get('nick_name', ''),
+id_number=request.POST.get('id_number', ''),
+phone1=request.POST.get('phone1', ''),
+phone2=request.POST.get('phone2', ''),
+email=request.POST.get('email', ''),
+face_image=request.FILES.get('face_image'),
+guarantee_name=request.POST.get('guarantee_name', ''),
+loan_amount=request.POST.get('loan_amount', ''),
+loan_amount_words=request.POST.get('loan_amount_words', ''),
+guarantee_date=guarantee_date,
+residence=request.POST.get('residence', ''),
+signature_image=request.FILES.get('signature_image'),
+)
+
+# Handle collateral items
+item_count = int(request.POST.get('item_count', 0))
+collateral_items = []
+for i in range(1, item_count + 1):
+collateral_items.append(Collateral(
+guarantor=guarantor,
+item_name=request.POST.get(f'item-name-{i}', ''),
+item_description=request.POST.get(f'item-description-{i}', ''),
+photo1=request.FILES.get(f'item-photo-{i}-1'),
+photo2=request.FILES.get(f'item-photo-{i}-2'),
+photo3=request.FILES.get(f'item-photo-{i}-3'),
+photo4=request.FILES.get(f'item-photo-{i}-4'),
+))
+
+# Bulk insert all collateral items at once
+Collateral.objects.bulk_create(collateral_items)
+
+messages.success(request, "Guarantor information submitted successfully.")
+return redirect('home')
+
+except Exception as e:
+print(f"An error occurred: {e}")
+messages.error(request, "An error occurred while saving Guarantor information.")
+
+# For non-POST requests
+loan_info = get_object_or_404(LoanInfo, id=loan_id)
+context['loan_info'] = loan_info
+return render(request, 'kopa/guarantor.html', context)
+
+
+
+
+
+<!--Refactored client_submission_form-->
+
+from django.db import transaction
+
+@login_required
+def client_submission_form(request):
+user = CustomUser.objects.get(id=request.user.id)
+
+try:
+# Check if the user already has a profile
+existing_profile = Profile.objects.filter(user=user).first()
+
+if request.method == 'POST':
+with transaction.atomic():
+# Use or create profile
+profile = existing_profile if existing_profile else Profile.objects.create(
+user=user,
+nickname=request.POST.get('Nickname', ''),
+phone1=request.POST.get('phone1', ''),
+phone2=request.POST.get('phone2', ''),
+face_image=request.FILES.get('face_image'),
+employment_status=request.POST.get('employment-status', ''),
+employer_name=request.POST.get('employer-name', ''),
+job_title=request.POST.get('job-title', ''),
+location_of_work=request.POST.get('location_of_work', ''),
+supervisors_name=request.POST.get('supervisors_name', ''),
+supervisors_contact=request.POST.get('supervisors_contact', ''),
+monthly_income=safe_decimal(request.POST.get('monthly_income', '')),
+monthly_expense=safe_decimal(request.POST.get('monthly_expense', '')),
+business_name=request.POST.get('business-name', ''),
+industry_type=request.POST.get('industry-type', ''),
+business_location=request.POST.get('business_location', ''),
+daily_income=safe_decimal(request.POST.get('daily_income', '')),
+daily_expense=safe_decimal(request.POST.get('daily_expense', '')),
+net_income=safe_decimal(request.POST.get('net_income', '')),
+)
+
+# Create LoanInfo
+loan_info = LoanInfo.objects.create(
+profile=profile,
+loan_amount=safe_decimal(request.POST.get('loan_amount', '')),
+amount_in_words=request.POST.get('amount_in_words', ''),
+date_of_loan=request.POST.get('date_of_loan', ''),
+repay_principal=safe_decimal(request.POST.get('repay_principal', '')),
+interest=request.POST.get('interest', ''),
+total=safe_decimal(request.POST.get('total', '')),
+repay_date=request.POST.get('repay_date', '')
+)
+
+# Handle collateral items
+item_count = int(request.POST.get('item_count', 0))
+collateral_items = []
+for i in range(1, item_count + 1):
+collateral_items.append(Client_Collateral(
+loan_info=loan_info,
+item_name=request.POST.get(f'item-name-{i}', ''),
+item_description=request.POST.get(f'item-description-{i}', ''),
+photo1=request.FILES.get(f'item-photo-{i}-1'),
+photo2=request.FILES.get(f'item-photo-{i}-2'),
+photo3=request.FILES.get(f'item-photo-{i}-3'),
+photo4=request.FILES.get(f'item-photo-{i}-4'),
+))
+
+Client_Collateral.objects.bulk_create(collateral_items)
+
+# Update or create SpouseInfo
+if existing_profile:
+SpouseInfo.objects.filter(profile=profile).update(
+marital_status=request.POST.get('marital-status', existing_profile.spouse_info.marital_status),
+spouse_name=request.POST.get('spouse-name', existing_profile.spouse_info.spouse_name),
+work_place=request.POST.get('work_place', existing_profile.spouse_info.work_place),
+position=request.POST.get('position', existing_profile.spouse_info.position),
+contact=request.POST.get('contact', existing_profile.spouse_info.contact),
+no_of_dependants=safe_int(request.POST.get('no_of_dependants', existing_profile.spouse_info.no_of_dependants)),
+parent_type=request.POST.get('parent-type', existing_profile.spouse_info.parent_type),
+father_full_name=request.POST.get('father-full-name', existing_profile.spouse_info.father_full_name),
+father_contact=request.POST.get('father-contact', existing_profile.spouse_info.father_contact),
+mother_full_name=request.POST.get('mother-full-name', existing_profile.spouse_info.mother_full_name),
+mother_contact=request.POST.get('mother-contact', existing_profile.spouse_info.mother_contact),
+nextofkin=request.POST.get('nextofkin', existing_profile.spouse_info.nextofkin),
+)
+else:
+SpouseInfo.objects.create(
+profile=profile,
+marital_status=request.POST.get('marital-status', ''),
+spouse_name=request.POST.get('spouse-name', ''),
+work_place=request.POST.get('work_place', ''),
+position=request.POST.get('position', ''),
+contact=request.POST.get('contact', ''),
+no_of_dependants=safe_int(request.POST.get('no_of_dependants', '')),
+parent_type=request.POST.get('parent-type', ''),
+father_full_name=request.POST.get('father-full-name', ''),
+father_contact=request.POST.get('father-contact', ''),
+mother_full_name=request.POST.get('mother-full-name', ''),
+mother_contact=request.POST.get('mother-contact', ''),
+nextofkin=request.POST.get('nextofkin', ''),
+)
+
+# Update or create ResidenceInfo
+if existing_profile:
+ResidenceInfo.objects.filter(profile=profile).update(
+residence_type=request.POST.get('residence_type', existing_profile.residence_info.residence_type),
+residence_description=request.POST.get('residence_description', existing_profile.residence_info.residence_description),
+rural_residence=request.POST.get('rural_residence', existing_profile.residence_info.rural_residence),
+)
+else:
+ResidenceInfo.objects.create(
+profile=profile,
+residence_type=request.POST.get('residence_type', ''),
+residence_description=request.POST.get('residence_description', ''),
+rural_residence=request.POST.get('rural_residence', '')
+)
+
+# Create CRBInfo
+CRBInfo.objects.create(
+loan_info=loan_info,
+signature_image=request.FILES.get('signature_image'),
+agree_to_terms=request.POST.get('agree_to_terms') == 'on'
+)
+
+messages.success(request, "Client information submitted successfully.")
+return redirect('guarantor', loan_id=loan_info.id)
+
+context = {
+'existing_profile': existing_profile
+}
+return render(request, 'kopa/client.html

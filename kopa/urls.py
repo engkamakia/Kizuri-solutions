@@ -3,6 +3,11 @@ from . import views
 from .views import *
 
 
+from django.conf.urls import handler404
+from . import views
+
+handler404 = 'kopa.views.custom_404_view'
+
 urlpatterns = [
     path('', views.index, name = "home"),
     #path('about/', views.about_us, name = "about"),

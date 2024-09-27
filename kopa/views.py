@@ -45,6 +45,9 @@ def logoutUser(request):
 def success(request):
     return render(request,'kopa/success.html')
 
+def custom_404_view(request, exception=None):
+    return render(request, 'kopa/404.html', status=404)
+
 
 
 
