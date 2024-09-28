@@ -439,15 +439,14 @@ def contact(request):
         subject = request.POST["subject"]
         message = request.POST["message"] 
         
-        # send email
-        """
+        # send email        
         send_mail(
             f"message from {email}, SUBJECT:" + subject, #subject
             message, #message
             email, #from email
             [settings.EMAIL_HOST_USER], #to email
         )
-        """
+       
         return render(request,'kopa/contacts.html',{"name":name})  
     
     else:

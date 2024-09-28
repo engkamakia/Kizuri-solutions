@@ -486,7 +486,7 @@
                           draggable="false"
                           alt=""
                           role="presentation"
-                          src="https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i9!2i470!3i302!4i256!2m3!1e0!2sm!3i476185792!2m3!1e2!6m1!3e5!3m14!2sen-US!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0&amp;key=AIzaSyDpfS1oRGreGSBU5HHjMmQ3o5NLw7VdJ6I&amp;token=70038"
+                          src="https://maps.google.com/maps?width=600&amp;height=100&amp;hl=en&amp;q=kitale&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                           style="
                             width: 256px;
                             height: 256px;
@@ -1586,13 +1586,21 @@
           <h2 class="contact-title">Get in Touch</h2>
         </div>
         <div class="col-lg-8">
-          <form
+          <!--<form
             class="form-contact contact_form"
             action="contact_process.php"
             method="post"
             id="contactForm"
             novalidate="novalidate"
-          >
+        >-->
+          <form
+                action="{% url 'contact'%}"
+                method="post"
+                role="form"
+                id="contactForm"                
+                class="form-contact contact_form"
+              >
+                {% csrf_token %}
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
@@ -1660,7 +1668,7 @@
             <span class="contact-info__icon"><i class="ti-home"></i></span>
             <div class="media-body">
               <h3>Thika Town, Kiambu.</h3>
-              <p>plaza, 237</p>
+              <p>ABC plaza</p>
             </div>
           </div>
           <div class="media contact-info">
@@ -1673,7 +1681,7 @@
           <div class="media contact-info">
             <span class="contact-info__icon"><i class="ti-email"></i></span>
             <div class="media-body">
-              <h3>kizuri@gmail.com</h3>
+              <h3>Kizurisolutions@gmail.com</h3>
               <p>Send us your query anytime!</p>
             </div>
           </div>
